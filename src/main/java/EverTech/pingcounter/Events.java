@@ -6,7 +6,6 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,21 +18,12 @@ public class Events {
     Minecraft mc = Minecraft.getMinecraft();
     int latency = 0;
     private GuiButton button;
-    private boolean worldLoaded = false;
     private long ticksActive = 0;
     private long lastOp = 0;
     @SubscribeEvent
-    public void onWorldLoad(WorldEvent.Load event) {
-        this.worldLoaded = true;
-    }
-    @SubscribeEvent
-    public void onWorldUnload(WorldEvent.Unload event){
-        this.worldLoaded = false;
-    }
-    @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
         ticksActive ++;
-        if(worldLoaded){printPing();}
+        if(Minecraft.getMinecraft().theWorld != null){printPing();}
     }
     @SubscribeEvent
     public void onGuiRender(GuiScreenEvent.InitGuiEvent.Post event){
