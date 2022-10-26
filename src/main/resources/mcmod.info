@@ -1,0 +1,16 @@
+[
+{
+  "modid": "pingCounter",
+  "name": "Ping Counter",
+  "description": "Displays ping on hud",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["EverTech1"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
