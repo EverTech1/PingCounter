@@ -13,7 +13,7 @@ import java.io.File;
 public class Main
 {
     public static final String MODID = "pingCounter";
-    public static final String VERSION = "1.0.0";
+    public static final String VERSION = "1.0.1";
     public static int positionX = 10;
     public static int positionY = 10;
     public static int selection = 0;

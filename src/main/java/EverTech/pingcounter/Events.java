@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiIngameMenu;
+import net.minecraft.client.gui.GuiMultiplayer;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -16,7 +17,7 @@ import java.awt.*;
 @SideOnly(Side.CLIENT)
 public class Events {
     Minecraft mc = Minecraft.getMinecraft();
-    int latency = 0;
+    long latency = 0;
     private GuiButton button;
     private long ticksActive = 0;
     private long lastOp = 0;
@@ -45,12 +46,14 @@ public class Events {
         }
     }
     public void printPing()  {
-        if(ticksActive-lastOp>120){
+        if(ticksActive-lastOp>400){
             lastOp = ticksActive;
             try{
                 EntityPlayerSP p = mc.thePlayer;
                 if(p!=null) {
-                    latency = mc.getNetHandler().getPlayerInfo(p.getUniqueID()).getResponseTime();
+                    long pts = mc.getCurrentServerData().pingToServer;
+                    new GuiMultiplayer(mc.currentScreen).getOldServerPinger().ping(mc.getCurrentServerData());
+                    latency = pts;
                 }
             }
             catch(Throwable err){
