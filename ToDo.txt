@@ -1,0 +1,2 @@
+- Add X and Y adjustments in in-game menu
+- Add keybind for opening settings menu in case button overlaps with other mods.
