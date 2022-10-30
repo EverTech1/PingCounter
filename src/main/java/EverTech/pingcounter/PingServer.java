@@ -21,7 +21,7 @@ import java.net.UnknownHostException;
 
 @SideOnly(Side.CLIENT)
 public class PingServer {
-    //Minecraft's server pinger without the unecessary stuff
+    //Minecraft's server pinger without the unnecessary stuff
     PingServer(ServerData server){
         try {
             sendPing(server);
