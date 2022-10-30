@@ -11,21 +11,25 @@ import org.lwjgl.input.Keyboard;
 
 import java.io.File;
 
-
 @Mod(modid = Main.MODID, version = Main.VERSION)
 public class Main
 {
     public static final String MODID = "pingCounter";
-    public static final String VERSION = "1.1.0";
+    public static final String VERSION = "1.2.0";
     public static boolean hideSettingsButton = false;
     public static int positionX = 10;
     public static int positionY = 10;
     public static int customX = 0;
     public static int customY = 0;
     public static int selection = 0;
-    public static int redVal = 255;
-    public static int greenVal = 255;
-    public static int blueVal = 255;
+    public static int redValText = 255;
+    public static int greenValText = 255;
+    public static int blueValText = 255;
+    public static int redValBg = 0;
+    public static int greenValBg = 0;
+    public static int blueValBg = 0;
+    public static float alphaValBg = 0.5F;
+
     public static boolean enableDisplay = true;
     public static KeyBinding openSettings = new KeyBinding("Open settings", Keyboard.KEY_SUBTRACT, "PingCounter");
     @EventHandler
@@ -40,9 +44,13 @@ public class Main
         customY = config.get("position", "customY", 0).getInt();
         selection = config.get("gui", "selection", 0).getInt();
         enableDisplay = config.get("gui", "enableDisplay", true).getBoolean();
-        redVal = config.get("color", "rVal", 255).getInt();
-        greenVal = config.get("color", "gVal", 255).getInt();
-        blueVal = config.get("color", "bVal",255).getInt();
+        redValText = config.get("color", "rVal", 255).getInt();
+        greenValText = config.get("color", "gVal", 255).getInt();
+        blueValText = config.get("color", "bVal",255).getInt();
+        redValBg = config.get("color", "rValBG", 0).getInt();
+        greenValBg = config.get("color", "gValBG", 0).getInt();
+        blueValBg = config.get("color", "bValBG", 0).getInt();
+        alphaValBg = (float)config.get("color", "alphaValBG", 0.5).getDouble();
         config.save();
         ClientRegistry.registerKeyBinding(openSettings);
         MinecraftForge.EVENT_BUS.register(new Events());

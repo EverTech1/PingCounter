@@ -26,9 +26,7 @@ public class SettingsGui extends GuiScreen {
             {"Bottom Left","10", Integer.toString(scaledHeight-10)}, {"Bottom Center",Integer.toString((scaledWidth/2)-size),Integer.toString(scaledHeight-10) }, {"Bottom Right",Integer.toString(scaledWidth-size-10-numSize), Integer.toString(scaledHeight-10)},
             {"Custom", String.valueOf(Main.customX), String.valueOf(Main.customY)}
     };
-    private final GuiSlider sliderRed = new GuiSlider(3, (scaledWidth/2)-180, (scaledHeight/2)-10,256, 20, "Red: ", "", 0, 255, Main.redVal, false, true);
-    private final GuiSlider sliderGreen = new GuiSlider(4, (scaledWidth/2)-180, (scaledHeight/2)+15,256, 20, "Green: ", "", 0, 255, Main.greenVal, false, true);
-    private final GuiSlider sliderBlue = new GuiSlider(5, (scaledWidth/2)-180, (scaledHeight/2)+40,256, 20, "Blue: ", "", 0, 255, Main.blueVal, false, true);
+
     private GuiTextField txtFieldX;
     private GuiTextField txtFieldY;
 
@@ -40,9 +38,7 @@ public class SettingsGui extends GuiScreen {
         buttonList.add(new GuiButton(0,(scaledWidth/2)-(stringSize/2)-30, (scaledHeight/2)+70, stringSize+60, 20, "Back"));
         buttonList.add(new GuiButton(1, (scaledWidth/2)-180, (scaledHeight/2)-70, mc.fontRendererObj.getStringWidth("Toggle")+20, 20, "Toggle"));
         buttonList.add(new GuiButton(2, (scaledWidth/2)-180, (scaledHeight/2)-40, mc.fontRendererObj.getStringWidth("Change Position")+20, 20, "Change Position"));
-        buttonList.add(sliderRed);
-        buttonList.add(sliderGreen);
-        buttonList.add(sliderBlue);
+        buttonList.add(new GuiButton(3, (scaledWidth/2)-180, (scaledHeight/2)-10,mc.fontRendererObj.getStringWidth("Color Settings")+20, 20, "Color Settings"));
         int offset = (scaledWidth/2)+mc.fontRendererObj.getStringWidth("Change Position")+mc.fontRendererObj.getStringWidth("XXXXXXXXXXXXX");
         this.txtFieldX = new GuiTextField(6, mc.fontRendererObj, offset-100, (scaledHeight/2)-35, 50, 20);
         this.txtFieldY = new GuiTextField(7, mc.fontRendererObj, offset-20, (scaledHeight/2)-35, 50, 20);
@@ -70,7 +66,7 @@ public class SettingsGui extends GuiScreen {
 
     @Override
     public void onGuiClosed() {
-        new UpdateConfigs().update(Main.positionX, Main.positionY, Main.customX, Main.customY, Main.selection, Main.enableDisplay, Main.redVal, Main.greenVal, Main.blueVal);
+        new UpdateConfigs().updatePos(Main.positionX, Main.positionY, Main.customX, Main.customY, Main.selection);
         super.onGuiClosed();
     }
 
@@ -93,7 +89,6 @@ public class SettingsGui extends GuiScreen {
             }
             Main.positionX = Main.customX = Objects.equals(txtFieldX.getText(), "") ? 0 : Integer.parseInt(txtFieldX.getText());
             Main.positionY = Main.customY = Objects.equals(txtFieldY.getText(), "") ? 0 : Integer.parseInt(txtFieldY.getText());
-            new UpdateConfigs().update(Main.positionX, Main.positionY, Main.customX, Main.customY, Main.selection, Main.enableDisplay, Main.redVal, Main.greenVal, Main.blueVal);
         }
     }
 
@@ -103,16 +98,6 @@ public class SettingsGui extends GuiScreen {
         txtFieldX.mouseClicked(mouseX, mouseY, mouseButton);
         txtFieldY.mouseClicked(mouseX, mouseY, mouseButton);
     }
-
-    @Override
-    protected void mouseReleased(int mouseX, int mouseY, int state) {
-        super.mouseReleased(mouseX, mouseY, state);
-        Main.redVal = sliderRed.getValueInt();
-        Main.greenVal = sliderGreen.getValueInt();
-        Main.blueVal = sliderBlue.getValueInt();
-        new UpdateConfigs().update(Main.positionX, Main.positionY, Main.customX, Main.customY, Main.selection, Main.enableDisplay, Main.redVal, Main.greenVal, Main.blueVal);
-    }
-
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
         super.actionPerformed(button);
@@ -132,6 +117,9 @@ public class SettingsGui extends GuiScreen {
                 String[] selected = strings[Main.selection];
                 Main.positionX = Main.selection == 9 ? Main.customX : Integer.parseInt(selected[1]);
                 Main.positionY = Main.selection == 9 ? Main.customY : Integer.parseInt(selected[2]);;
+                break;
+            case 3:
+                mc.displayGuiScreen(new ColorSettingsGui(this));
                 break;
         }
     }

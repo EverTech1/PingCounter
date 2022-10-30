@@ -2,9 +2,8 @@ package EverTech.pingcounter;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiIngameMenu;
-import net.minecraft.client.gui.GuiMultiplayer;
+import net.minecraft.client.gui.*;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -12,13 +11,14 @@ import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
 @SideOnly(Side.CLIENT)
 public class Events {
     Minecraft mc = Minecraft.getMinecraft();
-    long latency = 0;
+    public static long latency = 0;
     private GuiButton button;
     private long ticksActive = 0;
     private long lastOp = 0;
@@ -41,9 +41,23 @@ public class Events {
         }
     }
     @SubscribeEvent
-    public void onRenderTextEvent(RenderGameOverlayEvent.Text event){
+    public void onRenderOverlayTextEvent(RenderGameOverlayEvent.Text event){
         if(Main.enableDisplay){
-            mc.fontRendererObj.drawStringWithShadow("Ping: "+latency+" ms", Main.positionX, Main.positionY, new Color(Main.redVal, Main.greenVal, Main.blueVal).getRGB());
+            GlStateManager.disableTexture2D();
+            GlStateManager.disableAlpha();
+            GlStateManager.enableBlend();
+            GL11.glColor4f((float)Main.redValBg/255, (float)Main.greenValBg/255,(float)Main.blueValBg/255, Main.alphaValBg);
+            GL11.glBegin(GL11.GL_QUADS);
+            {
+                GL11.glVertex2i(Main.positionX-5, Main.positionY-5);
+                GL11.glVertex2i(Main.positionX-5, Main.positionY+mc.fontRendererObj.FONT_HEIGHT+4);
+                GL11.glVertex2i(Main.positionX+mc.fontRendererObj.getStringWidth("Ping: 999 ms")+5, Main.positionY+mc.fontRendererObj.FONT_HEIGHT+4);
+                GL11.glVertex2i(Main.positionX+mc.fontRendererObj.getStringWidth("Ping: 999 ms")+5, Main.positionY-5);
+
+            }
+            GL11.glEnd();
+            GlStateManager.enableTexture2D();
+            mc.fontRendererObj.drawStringWithShadow("Ping: "+latency+" ms", Main.positionX, Main.positionY, new Color(Main.redValText, Main.greenValText, Main.blueValText).getRGB());
         }
     }
     @SubscribeEvent
@@ -59,9 +73,7 @@ public class Events {
                 EntityPlayerSP p = mc.thePlayer;
                 if(p!=null) {
                     if(mc.getIntegratedServer()==null) {
-                        long pts = mc.getCurrentServerData().pingToServer;
-                        new GuiMultiplayer(mc.currentScreen).getOldServerPinger().ping(mc.getCurrentServerData());
-                        latency = pts;
+                        new PingServer(mc.getCurrentServerData());
                     }
                     else{
                         latency = 0;
