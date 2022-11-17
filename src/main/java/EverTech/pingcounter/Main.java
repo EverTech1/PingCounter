@@ -1,6 +1,7 @@
 package EverTech.pingcounter;
 
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -10,12 +11,13 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import org.lwjgl.input.Keyboard;
 
 import java.io.File;
+import java.util.Timer;
 
-@Mod(modid = Main.MODID, version = Main.VERSION)
+@Mod(modid = Main.MODID, version = Main.VERSION, updateJSON = "https://gist.githubusercontent.com/EverTech1/62b9c537189b016db2e7525ccb0ddfde/raw/update.json")
 public class Main
 {
     public static final String MODID = "pingCounter";
-    public static final String VERSION = "1.2.0";
+    public static final String VERSION = "1.3.0";
     public static boolean hideSettingsButton = false;
     public static int positionX = 10;
     public static int positionY = 10;
@@ -33,8 +35,8 @@ public class Main
     public static boolean enableDisplay = true;
     public static KeyBinding openSettings = new KeyBinding("Open settings", Keyboard.KEY_SUBTRACT, "PingCounter");
     @EventHandler
-    public void init(FMLInitializationEvent event)
-    {
+    public void init(FMLInitializationEvent event){
+        ForgeVersion.startVersionCheck();
         Configuration config = new Configuration(new File("config/PingCounter.cfg"));
         config.load();
         hideSettingsButton = config.get("gui", "hideSettingsButton", false).getBoolean();
@@ -53,6 +55,7 @@ public class Main
         alphaValBg = (float)config.get("color", "alphaValBG", 0.5).getDouble();
         config.save();
         ClientRegistry.registerKeyBinding(openSettings);
+        new Timer().schedule(new PingTimer(), 0, 5000);
         MinecraftForge.EVENT_BUS.register(new Events());
     }
 }

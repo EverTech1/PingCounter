@@ -2,7 +2,6 @@ package EverTech.pingcounter;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
-import net.minecraftforge.fml.client.config.GuiSlider;
 
 import java.io.IOException;
 import java.util.Arrays;

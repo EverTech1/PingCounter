@@ -1,11 +1,14 @@
 package EverTech.pingcounter;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.ForgeVersion;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -14,18 +17,22 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @SideOnly(Side.CLIENT)
 public class Events {
     Minecraft mc = Minecraft.getMinecraft();
     public static long latency = 0;
     private GuiButton button;
-    private long ticksActive = 0;
-    private long lastOp = 0;
+    private boolean updateCheck = false;
     @SubscribeEvent
-    public void onTick(TickEvent.ClientTickEvent event) {
-        ticksActive ++;
-        if(Minecraft.getMinecraft().theWorld != null){printPing();}
+    public void onTick(TickEvent e){
+        if(!updateCheck){
+            if(mc.theWorld!=null&&mc.thePlayer!=null){
+                checkVersion();
+            }
+        }
     }
     @SubscribeEvent
     public void onGuiInit(GuiScreenEvent.InitGuiEvent.Post event){
@@ -66,23 +73,22 @@ public class Events {
             mc.displayGuiScreen(new SettingsGui(true));
         }
     }
-    public void printPing()  {
-        if(ticksActive-lastOp>=300){
-            lastOp = ticksActive;
-            try{
-                EntityPlayerSP p = mc.thePlayer;
-                if(p!=null) {
-                    if(mc.getIntegratedServer()==null) {
-                        new PingServer(mc.getCurrentServerData());
-                    }
-                    else{
-                        latency = 0;
-                    }
+    public void checkVersion(){
+        ForgeVersion.CheckResult res = ForgeVersion.getResult(Loader.instance().activeModContainer());
+        if(res.status == ForgeVersion.Status.PENDING){
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    checkVersion();
                 }
+            }, 5000);
+        }
+        else{
+            if(res.status == ForgeVersion.Status.OUTDATED && !updateCheck){
+                mc.thePlayer.addChatComponentMessage(new ChatComponentText("Ping counter mod is outdated, please update to latest version."));
+                mc.thePlayer.addChatComponentMessage(ForgeHooks.newChatWithLinks("https://www.curseforge.com/minecraft/mc-mods/pingcounter"));
             }
-            catch(Throwable err){
-                err.printStackTrace();
-            }
+            updateCheck = true;
         }
     }
 }
