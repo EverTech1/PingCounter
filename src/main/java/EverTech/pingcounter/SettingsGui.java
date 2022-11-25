@@ -16,8 +16,9 @@ public class SettingsGui extends GuiScreen {
     }
     int scaledWidth = new ScaledResolution(mc).getScaledWidth();
     int scaledHeight = new ScaledResolution(mc).getScaledHeight();
+    int scaledFactor = new ScaledResolution(mc).getScaleFactor();
     private final List<Integer> allowed = Arrays.asList(14, 28, 199, 200, 203, 205, 207, 208, 211);
-    private final int size = Minecraft.getMinecraft().fontRendererObj.getStringWidth("Ping: ms");
+    private final int size = Minecraft.getMinecraft().fontRendererObj.getStringWidth("Ping: ms ");
     private final int numSize = Minecraft.getMinecraft().fontRendererObj.getStringWidth("999");
     private final String[][] strings = {
             {"Top Left", "10", "10"}, {"Top Center",Integer.toString((scaledWidth/2)-size),"10"}, {"Top Right", Integer.toString((scaledWidth-size)-10-numSize), "10"},
@@ -86,8 +87,8 @@ public class SettingsGui extends GuiScreen {
                     //I do not care
                 }
             }
-            Main.positionX = Main.customX = Objects.equals(txtFieldX.getText(), "") ? 0 : Integer.parseInt(txtFieldX.getText());
-            Main.positionY = Main.customY = Objects.equals(txtFieldY.getText(), "") ? 0 : Integer.parseInt(txtFieldY.getText());
+            Main.customX = Objects.equals(txtFieldX.getText(), "") ? 0 : Integer.parseInt(txtFieldX.getText());
+            Main.customY = Objects.equals(txtFieldY.getText(), "") ? 0 : Integer.parseInt(txtFieldY.getText());
         }
     }
 
@@ -113,9 +114,9 @@ public class SettingsGui extends GuiScreen {
                 break;
             case 2:
                 Main.selection = (Main.selection + 1)%10;
-                String[] selected = strings[Main.selection];
-                Main.positionX = Main.selection == 9 ? Main.customX : Integer.parseInt(selected[1]);
-                Main.positionY = Main.selection == 9 ? Main.customY : Integer.parseInt(selected[2]);;
+                //String[] selected = strings[Main.selection];
+                //Main.positionX = Main.selection == 9 ? Main.customX : Integer.parseInt(selected[1]);
+                //Main.positionY = Main.selection == 9 ? Main.customY : Integer.parseInt(selected[2]);;
                 break;
             case 3:
                 mc.displayGuiScreen(new ColorSettingsGui(this));

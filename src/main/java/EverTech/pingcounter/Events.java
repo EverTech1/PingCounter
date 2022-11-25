@@ -50,21 +50,7 @@ public class Events {
     @SubscribeEvent
     public void onRenderOverlayTextEvent(RenderGameOverlayEvent.Text event){
         if(Main.enableDisplay){
-            GlStateManager.disableTexture2D();
-            GlStateManager.disableAlpha();
-            GlStateManager.enableBlend();
-            GL11.glColor4f((float)Main.redValBg/255, (float)Main.greenValBg/255,(float)Main.blueValBg/255, Main.alphaValBg);
-            GL11.glBegin(GL11.GL_QUADS);
-            {
-                GL11.glVertex2i(Main.positionX-5, Main.positionY-5);
-                GL11.glVertex2i(Main.positionX-5, Main.positionY+mc.fontRendererObj.FONT_HEIGHT+4);
-                GL11.glVertex2i(Main.positionX+mc.fontRendererObj.getStringWidth("Ping: 999 ms")+5, Main.positionY+mc.fontRendererObj.FONT_HEIGHT+4);
-                GL11.glVertex2i(Main.positionX+mc.fontRendererObj.getStringWidth("Ping: 999 ms")+5, Main.positionY-5);
-
-            }
-            GL11.glEnd();
-            GlStateManager.enableTexture2D();
-            mc.fontRendererObj.drawStringWithShadow("Ping: "+latency+" ms", Main.positionX, Main.positionY, new Color(Main.redValText, Main.greenValText, Main.blueValText).getRGB());
+            drawPing();
         }
     }
     @SubscribeEvent
@@ -90,5 +76,35 @@ public class Events {
             }
             updateCheck = true;
         }
+    }
+    public void drawPing(){
+        ScaledResolution scaled = new ScaledResolution(mc);
+        int scaledHeight = scaled.getScaledHeight();
+        int scaledWidth = scaled.getScaledWidth();
+        int scaledFactor = scaled.getScaleFactor();
+        final int size = Minecraft.getMinecraft().fontRendererObj.getStringWidth("Ping: ms ");
+        final int numSize = Minecraft.getMinecraft().fontRendererObj.getStringWidth("999");
+        final int[][] nums = {
+                {10, 10}, {(scaledWidth/2)-size,10}, {scaledWidth-size-numSize-10, 10},
+                {10 ,scaledHeight/2}, {(scaledWidth/2)-size, scaledHeight/2}, {scaledWidth-size-numSize-10 ,scaledHeight/2},
+                {10, scaledHeight-10-mc.fontRendererObj.FONT_HEIGHT}, {(scaledWidth/2)-size,scaledHeight-10-mc.fontRendererObj.FONT_HEIGHT}, {scaledWidth-size-numSize-10, scaledHeight-10-mc.fontRendererObj.FONT_HEIGHT},
+                {Main.customX*scaledFactor/5, Main.customY*scaledFactor/5}
+        };
+        int sel = Main.selection;
+        GlStateManager.disableTexture2D();
+        GlStateManager.disableAlpha();
+        GlStateManager.enableBlend();
+        GL11.glColor4f((float)Main.redValBg/255, (float)Main.greenValBg/255,(float)Main.blueValBg/255, Main.alphaValBg);
+        GL11.glBegin(GL11.GL_QUADS);
+        {
+            GL11.glVertex2i(nums[sel][0]-5, nums[sel][1]-5);
+            GL11.glVertex2i(nums[sel][0]-5, nums[sel][1]+mc.fontRendererObj.FONT_HEIGHT+4);
+            GL11.glVertex2i(nums[sel][0]+mc.fontRendererObj.getStringWidth("Ping: 999 ms")+5, nums[sel][1]+mc.fontRendererObj.FONT_HEIGHT+4);
+            GL11.glVertex2i(nums[sel][0]+mc.fontRendererObj.getStringWidth("Ping: 999 ms")+5, nums[sel][1]-5);
+
+        }
+        GL11.glEnd();
+        GlStateManager.enableTexture2D();
+        mc.fontRendererObj.drawStringWithShadow("Ping: "+latency+" ms", nums[sel][0], nums[sel][1], new Color(Main.redValText, Main.greenValText, Main.blueValText).getRGB());
     }
 }
