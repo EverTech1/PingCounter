@@ -81,14 +81,13 @@ public class Events {
         ScaledResolution scaled = new ScaledResolution(mc);
         int scaledHeight = scaled.getScaledHeight();
         int scaledWidth = scaled.getScaledWidth();
-        int scaledFactor = scaled.getScaleFactor();
         final int size = Minecraft.getMinecraft().fontRendererObj.getStringWidth("Ping: ms ");
         final int numSize = Minecraft.getMinecraft().fontRendererObj.getStringWidth("999");
         final int[][] nums = {
                 {10, 10}, {(scaledWidth/2)-size,10}, {scaledWidth-size-numSize-10, 10},
                 {10 ,scaledHeight/2}, {(scaledWidth/2)-size, scaledHeight/2}, {scaledWidth-size-numSize-10 ,scaledHeight/2},
                 {10, scaledHeight-10-mc.fontRendererObj.FONT_HEIGHT}, {(scaledWidth/2)-size,scaledHeight-10-mc.fontRendererObj.FONT_HEIGHT}, {scaledWidth-size-numSize-10, scaledHeight-10-mc.fontRendererObj.FONT_HEIGHT},
-                {Main.customX*scaledFactor/5, Main.customY*scaledFactor/5}
+                {Math.round(Main.customX*scaledWidth), Math.round(Main.customY*scaledHeight)}
         };
         int sel = Main.selection;
         GlStateManager.disableTexture2D();

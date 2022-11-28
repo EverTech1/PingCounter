@@ -22,13 +22,11 @@ public class UpdateConfigs {
         catColor.get("alphaValBG").set(alphaB);
         config.save();
     }
-    public void updatePos(int x, int y, int custX, int custY, int selection){
+    public void updatePos(float custX, float custY, int selection){
         Configuration config = new Configuration(new File("config/PingCounter.cfg"));
         config.load();
         ConfigCategory catPos = config.getCategory("position");
         config.getCategory("gui").get("selection").set(selection);
-        catPos.get("positionX").set(x);
-        catPos.get("positionY").set(y);
         catPos.get("customX").set(custX);
         catPos.get("customY").set(custY);
 
