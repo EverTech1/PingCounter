@@ -17,8 +17,9 @@ import java.util.Timer;
 public class Main
 {
     public static final String MODID = "pingCounter";
-    public static final String VERSION = "1.4.0";
+    public static final String VERSION = "1.5.0";
     public static boolean hideSettingsButton = false;
+    public static boolean enableTextShadow = true;
     public static float customX = 0;
     public static float customY = 0;
     public static int selection = 0;
@@ -38,6 +39,7 @@ public class Main
         Configuration config = new Configuration(new File("config/PingCounter.cfg"));
         config.load();
         hideSettingsButton = config.get("gui", "hideSettingsButton", false).getBoolean();
+        enableTextShadow = config.get("color", "enableTextShadow", true).getBoolean();
         float tempCustomX = (float)config.get("position", "customX", 0.0).getDouble();
         float tempCustomY = (float)config.get("position", "customY", 0.0).getDouble();
         customX = tempCustomX > 1 ? 0 : tempCustomX;

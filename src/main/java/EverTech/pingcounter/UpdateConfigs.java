@@ -6,7 +6,7 @@ import net.minecraftforge.common.config.Configuration;
 import java.io.File;
 
 public class UpdateConfigs {
-    public void updateGui(boolean isEnabled, int rT, int gT, int bT, int rB, int gB, int bB, float alphaB){
+    public void updateGui(boolean isEnabled, int rT, int gT, int bT, int rB, int gB, int bB, float alphaB, boolean textShadow){
         Configuration config = new Configuration(new File("config/PingCounter.cfg"));
         config.load();
         ConfigCategory catGui = config.getCategory("gui");
@@ -20,6 +20,7 @@ public class UpdateConfigs {
         catColor.get("gValBG").set(gB);
         catColor.get("bValBG").set(bB);
         catColor.get("alphaValBG").set(alphaB);
+        catColor.get("enableTextShadow").set(textShadow);
         config.save();
     }
     public void updatePos(float custX, float custY, int selection){

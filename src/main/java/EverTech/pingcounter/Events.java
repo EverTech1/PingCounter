@@ -104,6 +104,7 @@ public class Events {
         }
         GL11.glEnd();
         GlStateManager.enableTexture2D();
-        mc.fontRendererObj.drawStringWithShadow("Ping: "+latency+" ms", nums[sel][0], nums[sel][1], new Color(Main.redValText, Main.greenValText, Main.blueValText).getRGB());
+        GlStateManager.resetColor();
+        mc.fontRendererObj.drawString("Ping: "+latency+" ms", nums[sel][0], nums[sel][1], new Color(Main.redValText, Main.greenValText, Main.blueValText).getRGB(), Main.enableTextShadow);
     }
 }
