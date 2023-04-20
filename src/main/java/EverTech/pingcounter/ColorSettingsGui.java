@@ -77,7 +77,7 @@ public class ColorSettingsGui extends GuiScreen {
 
     @Override
     public void onGuiClosed() {
-        new UpdateConfigs().updateGui(Main.enableDisplay, Main.redValText, Main.greenValText, Main.blueValText, Main.redValBg,Main.greenValBg,Main.blueValBg,Main.alphaValBg, Main.enableTextShadow);
+        new UpdateConfigs().updateGui();
         super.onGuiClosed();
     }
 }

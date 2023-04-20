@@ -29,13 +29,13 @@ public class PositionGui extends GuiScreen {
         Main.enableDisplay = false;
         super.initGui();
         buttonList.add(new GuiButton(0, (scaledWidth/2)-(mc.fontRendererObj.getStringWidth("Back")/2)-15, scaledHeight-30, mc.fontRendererObj.getStringWidth("Back")+30, 20, "Back"));
-        buttonList.add(new GuiButton(1, (scaledWidth/2)-(mc.fontRendererObj.getStringWidth("Reset")/2)-15, scaledHeight-60, mc.fontRendererObj.getStringWidth("Reset")+30, 20, "Reset"));
+        buttonList.add(new GuiButton(1, (scaledWidth/2)-(mc.fontRendererObj.getStringWidth("Reset   ")/2)-15, scaledHeight-60, mc.fontRendererObj.getStringWidth("Reset")+30, 20, "Reset"));
 
     }
 
     @Override
     public void onGuiClosed() {
-        new UpdateConfigs().updatePos(Main.customX, Main.customY, Main.selection);
+        new UpdateConfigs().updatePos();
         Main.enableDisplay = prevEnableState;
         super.onGuiClosed();
     }

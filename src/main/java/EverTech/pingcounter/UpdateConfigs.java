@@ -6,30 +6,30 @@ import net.minecraftforge.common.config.Configuration;
 import java.io.File;
 
 public class UpdateConfigs {
-    public void updateGui(boolean isEnabled, int rT, int gT, int bT, int rB, int gB, int bB, float alphaB, boolean textShadow){
+    public void updateGui(){
         Configuration config = new Configuration(new File("config/PingCounter.cfg"));
         config.load();
         ConfigCategory catGui = config.getCategory("gui");
         ConfigCategory catColor = config.getCategory("color");
 
-        catGui.get("enableDisplay").set(isEnabled);
-        catColor.get("rVal").set(rT);
-        catColor.get("gVal").set(gT);
-        catColor.get("bVal").set(bT);
-        catColor.get("rValBG").set(rB);
-        catColor.get("gValBG").set(gB);
-        catColor.get("bValBG").set(bB);
-        catColor.get("alphaValBG").set(alphaB);
-        catColor.get("enableTextShadow").set(textShadow);
+        catGui.get("enableDisplay").set(Main.enableDisplay);
+        catColor.get("rVal").set(Main.redValText);
+        catColor.get("gVal").set(Main.greenValText);
+        catColor.get("bVal").set(Main.blueValText);
+        catColor.get("rValBG").set(Main.redValBg);
+        catColor.get("gValBG").set(Main.greenValBg);
+        catColor.get("bValBG").set(Main.blueValBg);
+        catColor.get("alphaValBG").set(Main.alphaValBg);
+        catColor.get("enableTextShadow").set(Main.enableTextShadow);
         config.save();
     }
-    public void updatePos(float custX, float custY, int selection){
+    public void updatePos(){
         Configuration config = new Configuration(new File("config/PingCounter.cfg"));
         config.load();
         ConfigCategory catPos = config.getCategory("position");
-        config.getCategory("gui").get("selection").set(selection);
-        catPos.get("customX").set(custX);
-        catPos.get("customY").set(custY);
+        config.getCategory("gui").get("selection").set(Main.selection);
+        catPos.get("customX").set(Main.customX);
+        catPos.get("customY").set(Main.customY);
 
         config.save();
     }

@@ -47,7 +47,7 @@ public class SettingsGui extends GuiScreen {
 
     @Override
     public void onGuiClosed() {
-        new UpdateConfigs().updatePos(Main.customX, Main.customY, Main.selection);
+        new UpdateConfigs().updatePos();
         super.onGuiClosed();
     }
     @Override
