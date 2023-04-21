@@ -2,12 +2,13 @@ package EverTech.pingcounter;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
+import net.minecraftforge.fml.client.config.GuiSlider;
 
 import java.io.IOException;
 
 public class SettingsGui extends GuiScreen {
     public Minecraft mc = Minecraft.getMinecraft();
-    private boolean fromKeybind;
+    final private boolean fromKeybind;
     public SettingsGui(boolean fromKeybind){
         this.fromKeybind = fromKeybind;
     }
@@ -21,13 +22,14 @@ public class SettingsGui extends GuiScreen {
             {"Bottom Left","10", Integer.toString(scaledHeight-10)}, {"Bottom Center",Integer.toString((scaledWidth/2)-size),Integer.toString(scaledHeight-10) }, {"Bottom Right",Integer.toString(scaledWidth-size-10-numSize), Integer.toString(scaledHeight-10)},
             {"Custom", String.valueOf(Main.customX), String.valueOf(Main.customY)}
     };
-
+    private final GuiSlider scalarSlider = new GuiSlider(5, (scaledWidth/2)-180, (scaledHeight/2)+20,256, 20, "Scale: ", "", 0.1, 3, Main.scalar, true, true);
 
     @Override
     public void initGui() {
         super.initGui();
         mc.updateDisplay();
         int stringSize = mc.fontRendererObj.getStringWidth("Back");
+        buttonList.add(scalarSlider);
         buttonList.add(new GuiButton(0,(scaledWidth/2)-(stringSize/2)-30, (scaledHeight/2)+70, stringSize+60, 20, "Back"));
         buttonList.add(new GuiButton(1, (scaledWidth/2)-180, (scaledHeight/2)-70, mc.fontRendererObj.getStringWidth("Toggle")+20, 20, "Toggle"));
         buttonList.add(new GuiButton(2, (scaledWidth/2)-180, (scaledHeight/2)-40, mc.fontRendererObj.getStringWidth("Change Position")+20, 20, "Change Position"));
@@ -74,6 +76,22 @@ public class SettingsGui extends GuiScreen {
                 mc.displayGuiScreen(new PositionGui(this));
                 break;
         }
+    }
+
+    @Override
+    protected void mouseClickMove(int p_mouseClickMove_1_, int p_mouseClickMove_2_, int p_mouseClickMove_3_, long p_mouseClickMove_4_) {
+        Main.scalar = Math.floor(scalarSlider.getValue()*10)/10;
+        scalarSlider.setValue(Main.scalar);
+        scalarSlider.updateSlider();
+        super.mouseClickMove(p_mouseClickMove_1_, p_mouseClickMove_2_, p_mouseClickMove_3_, p_mouseClickMove_4_);
+    }
+
+    @Override
+    protected void mouseReleased(int mouseX, int mouseY, int state) {
+        super.mouseReleased(mouseX, mouseY, state);
+        Main.scalar = Math.floor(scalarSlider.getValue()*10)/10;
+        scalarSlider.setValue(Main.scalar);
+        scalarSlider.updateSlider();
     }
 }
 

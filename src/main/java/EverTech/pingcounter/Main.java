@@ -30,7 +30,7 @@ public class Main
     public static int greenValBg = 0;
     public static int blueValBg = 0;
     public static float alphaValBg = 0.5F;
-
+    public static double scalar = 1;
     public static boolean enableDisplay = true;
     public static KeyBinding openSettings = new KeyBinding("Open settings", Keyboard.KEY_SUBTRACT, "PingCounter");
     @EventHandler
@@ -53,6 +53,7 @@ public class Main
         greenValBg = config.get("color", "gValBG", 0).getInt();
         blueValBg = config.get("color", "bValBG", 0).getInt();
         alphaValBg = (float)config.get("color", "alphaValBG", 0.5).getDouble();
+        scalar = config.get("position", "scalar", 1.0).getDouble();
         config.save();
         ClientRegistry.registerKeyBinding(openSettings);
         new Timer().schedule(new PingTimer(), 0, 5000);

@@ -20,6 +20,8 @@ import java.awt.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static EverTech.pingcounter.Main.scalar;
+
 @SideOnly(Side.CLIENT)
 public class Events {
     Minecraft mc = Minecraft.getMinecraft();
@@ -90,21 +92,24 @@ public class Events {
                 {Math.round(Main.customX*scaledWidth), Math.round(Main.customY*scaledHeight)}
         };
         int sel = Main.selection;
+        GL11.glPushMatrix();
         GlStateManager.disableTexture2D();
         GlStateManager.disableAlpha();
         GlStateManager.enableBlend();
         GL11.glColor4f((float)Main.redValBg/255, (float)Main.greenValBg/255,(float)Main.blueValBg/255, Main.alphaValBg);
         GL11.glBegin(GL11.GL_QUADS);
         {
-            GL11.glVertex2i(nums[sel][0]-5, nums[sel][1]-5);
-            GL11.glVertex2i(nums[sel][0]-5, nums[sel][1]+mc.fontRendererObj.FONT_HEIGHT+4);
-            GL11.glVertex2i(nums[sel][0]+mc.fontRendererObj.getStringWidth("Ping: 999 ms")+5, nums[sel][1]+mc.fontRendererObj.FONT_HEIGHT+4);
-            GL11.glVertex2i(nums[sel][0]+mc.fontRendererObj.getStringWidth("Ping: 999 ms")+5, nums[sel][1]-5);
+            GL11.glVertex2i(nums[sel][0]-(int)(5*scalar), nums[sel][1]-(int)(5* scalar));
+            GL11.glVertex2i(nums[sel][0]-(int)(5*scalar), nums[sel][1]+(int)((mc.fontRendererObj.FONT_HEIGHT+4)*scalar));
+            GL11.glVertex2i(nums[sel][0]+(int)((mc.fontRendererObj.getStringWidth("Ping: 999 ms")+5)*scalar), nums[sel][1]+(int)((mc.fontRendererObj.FONT_HEIGHT+4)*scalar));
+            GL11.glVertex2i(nums[sel][0]+(int)((mc.fontRendererObj.getStringWidth("Ping: 999 ms")+5)*scalar), nums[sel][1]-(int)(5*scalar));
 
         }
         GL11.glEnd();
         GlStateManager.enableTexture2D();
         GlStateManager.resetColor();
-        mc.fontRendererObj.drawString("Ping: "+latency+" ms", nums[sel][0], nums[sel][1], new Color(Main.redValText, Main.greenValText, Main.blueValText).getRGB(), Main.enableTextShadow);
+        GlStateManager.scale(scalar,scalar,scalar);
+        mc.fontRendererObj.drawString("Ping: "+latency+" ms", (int)(nums[sel][0]/scalar), (int)(nums[sel][1]/scalar), new Color(Main.redValText, Main.greenValText, Main.blueValText).getRGB(), Main.enableTextShadow);
+        GL11.glPopMatrix();
     }
 }

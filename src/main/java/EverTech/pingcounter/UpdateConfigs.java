@@ -30,7 +30,7 @@ public class UpdateConfigs {
         config.getCategory("gui").get("selection").set(Main.selection);
         catPos.get("customX").set(Main.customX);
         catPos.get("customY").set(Main.customY);
-
+        catPos.get("scalar").set(Main.scalar);
         config.save();
     }
 }
