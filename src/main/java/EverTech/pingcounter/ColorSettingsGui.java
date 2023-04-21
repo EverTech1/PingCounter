@@ -55,8 +55,7 @@ public class ColorSettingsGui extends GuiScreen {
     }
 
     @Override
-    protected void mouseReleased(int mouseX, int mouseY, int state) {
-        super.mouseReleased(mouseX, mouseY, state);
+    protected void mouseClickMove(int p_mouseClickMove_1_, int p_mouseClickMove_2_, int p_mouseClickMove_3_, long p_mouseClickMove_4_) {
         //text
         Main.redValText = sliderRedText.getValueInt();
         Main.greenValText = sliderGreenText.getValueInt();
@@ -66,6 +65,7 @@ public class ColorSettingsGui extends GuiScreen {
         Main.greenValBg = sliderGreenBg.getValueInt();
         Main.blueValBg = sliderBlueBg.getValueInt();
         Main.alphaValBg = (float)sliderAlphaBg.getValue()/100;
+        super.mouseClickMove(p_mouseClickMove_1_, p_mouseClickMove_2_, p_mouseClickMove_3_, p_mouseClickMove_4_);
     }
 
     @Override
