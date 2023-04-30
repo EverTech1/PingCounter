@@ -17,7 +17,7 @@ import java.util.Timer;
 public class Main
 {
     public static final String MODID = "pingCounter";
-    public static final String VERSION = "1.6.0";
+    public static final String VERSION = "1.7.0";
     public static boolean hideSettingsButton = false;
     public static boolean enableTextShadow = true;
     public static float customX = 0;
@@ -32,6 +32,7 @@ public class Main
     public static float alphaValBg = 0.5F;
     public static double scalar = 1;
     public static boolean enableDisplay = true;
+    public static String displayText = "Ping: $[ping]ms";
     public static KeyBinding openSettings = new KeyBinding("Open settings", Keyboard.KEY_SUBTRACT, "PingCounter");
     @EventHandler
     public void init(FMLInitializationEvent event){
@@ -54,6 +55,7 @@ public class Main
         blueValBg = config.get("color", "bValBG", 0).getInt();
         alphaValBg = (float)config.get("color", "alphaValBG", 0.5).getDouble();
         scalar = config.get("position", "scalar", 1.0).getDouble();
+        displayText = config.get("gui", "displayText", "Ping: $[ping]ms").getString();
         config.save();
         ClientRegistry.registerKeyBinding(openSettings);
         new Timer().schedule(new PingTimer(), 0, 5000);

@@ -43,46 +43,54 @@ public class PositionGui extends GuiScreen {
     private boolean enableEdit = false;
     private int diffX = 0;
     private int diffY = 0;
+
     @Override
-    protected void mouseClickMove(int p_mouseClickMove_1_, int p_mouseClickMove_2_, int p_mouseClickMove_3_, long p_mouseClickMove_4_) {
+    public void updateScreen() {
+        super.updateScreen();
+    }
+
+    @Override
+    protected void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
         if(enableEdit){
-            int posX = p_mouseClickMove_1_ + diffX;
-            int posY = p_mouseClickMove_2_ + diffY;
+            int posX = mouseX + diffX;
+            int posY = mouseY + diffY;
             ScaledResolution scaled = new ScaledResolution(mc);
             scaledWidth = scaled.getScaledWidth();
             scaledHeight = scaled.getScaledHeight();
             Main.customX = currentX = Math.min(Math.max((float)posX/scaledWidth, 0), (float)0.99);
             Main.customY = currentY = Math.min(Math.max((float)posY/scaledHeight, 0), (float)0.99);
         }
-        super.mouseClickMove(p_mouseClickMove_1_, p_mouseClickMove_2_, p_mouseClickMove_3_, p_mouseClickMove_4_);
+        super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
     }
 
     @Override
-    protected void mouseClicked(int p_mouseClicked_1_, int p_mouseClicked_2_, int p_mouseClicked_3_) throws IOException {
-        if(p_mouseClicked_1_ >= currentX*scaledWidth-4*Main.scalar && p_mouseClicked_1_ <= currentX*scaledWidth+(mc.fontRendererObj.getStringWidth("Ping: 999 ms")+4)*Main.scalar && p_mouseClicked_2_ >= currentY*scaledHeight-4*Main.scalar && p_mouseClicked_2_ <= currentY*scaledHeight+(mc.fontRendererObj.FONT_HEIGHT+3)*Main.scalar){
-            diffX = Math.round(currentX*scaledWidth-p_mouseClicked_1_);
-            diffY = Math.round(currentY*scaledHeight-p_mouseClicked_2_);
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        if(mouseX >= currentX*scaledWidth-4*Main.scalar && mouseY <= currentX*scaledWidth+(mc.fontRendererObj.getStringWidth(Main.displayText.replaceAll("(\\$\\[ping])", "999"))+4)*Main.scalar && mouseY >= currentY*scaledHeight-4*Main.scalar && mouseY <= currentY*scaledHeight+(mc.fontRendererObj.FONT_HEIGHT+3)*Main.scalar){
+            diffX = Math.round(currentX*scaledWidth-mouseX);
+            diffY = Math.round(currentY*scaledHeight-mouseY);
             enableEdit = true;
         }
-        super.mouseClicked(p_mouseClicked_1_, p_mouseClicked_2_, p_mouseClicked_3_);
+        super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
+
     @Override
-    protected void mouseReleased(int p_mouseReleased_1_, int p_mouseReleased_2_, int p_mouseReleased_3_) {
+    protected void mouseReleased(int mouseX, int mouseY, int state) {
         enableEdit = false;
-        super.mouseReleased(p_mouseReleased_1_, p_mouseReleased_2_, p_mouseReleased_3_);
+        super.mouseReleased(mouseX, mouseY, state);
     }
 
     @Override
-    public void drawScreen(int p_drawScreen_1_, int p_drawScreen_2_, float p_drawScreen_3_) {
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawRect(0,0, scaledWidth, scaledHeight, 0xA0000000);
         drawPing(currentX, currentY);
-        super.drawScreen(p_drawScreen_1_, p_drawScreen_2_, p_drawScreen_3_);
+        super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
+
     @Override
-    protected void actionPerformed(GuiButton p_actionPerformed_1_) throws IOException {
-        switch(p_actionPerformed_1_.id){
+    protected void actionPerformed(GuiButton button) throws IOException {
+        switch(button.id){
             case 0:
                 mc.displayGuiScreen(parentGui);
                 break;
@@ -90,8 +98,9 @@ public class PositionGui extends GuiScreen {
                 Main.customX = currentX = 0;
                 Main.customY = currentY = 0;
         }
-        super.actionPerformed(p_actionPerformed_1_);
+        super.actionPerformed(button);
     }
+
     public void drawPing(float x, float y){
         int scaledX = Math.round(x*scaledWidth);
         int scaledY = Math.round(y*scaledHeight);
@@ -104,14 +113,14 @@ public class PositionGui extends GuiScreen {
         {
             GL11.glVertex2i(scaledX-(int)(5*Main.scalar), scaledY-(int)(5*Main.scalar));
             GL11.glVertex2i(scaledX-(int)(5*Main.scalar), scaledY+(int)((mc.fontRendererObj.FONT_HEIGHT+5)*Main.scalar));
-            GL11.glVertex2i(scaledX+(int)((mc.fontRendererObj.getStringWidth("Ping: 999 ms")+5)*Main.scalar), scaledY+(int)((mc.fontRendererObj.FONT_HEIGHT+5)*Main.scalar));
-            GL11.glVertex2i(scaledX+(int)((mc.fontRendererObj.getStringWidth("Ping: 999 ms")+5)*Main.scalar), scaledY-(int)(5*Main.scalar));
+            GL11.glVertex2i(scaledX+(int)((mc.fontRendererObj.getStringWidth(Main.displayText.replaceAll("(\\$\\[ping])", "999"))+5)*Main.scalar), scaledY+(int)((mc.fontRendererObj.FONT_HEIGHT+5)*Main.scalar));
+            GL11.glVertex2i(scaledX+(int)((mc.fontRendererObj.getStringWidth(Main.displayText.replaceAll("(\\$\\[ping])", "999"))+5)*Main.scalar), scaledY-(int)(5*Main.scalar));
 
         }
         GL11.glEnd();
         GlStateManager.enableTexture2D();
         GlStateManager.scale(Main.scalar, Main.scalar, Main.scalar);
-        mc.fontRendererObj.drawString("Ping: "+Events.latency+" ms", (int)(scaledX/Main.scalar), (int)(scaledY/Main.scalar), new Color(Main.redValText, Main.greenValText, Main.blueValText).getRGB(), Main.enableTextShadow);
+        mc.fontRendererObj.drawString(Main.displayText.replaceAll("(\\$\\[ping])", String.valueOf(Events.latency)), (int)(scaledX/Main.scalar), (int)(scaledY/Main.scalar), new Color(Main.redValText, Main.greenValText, Main.blueValText).getRGB(), Main.enableTextShadow);
         GL11.glPopMatrix();
     }
 }
