@@ -28,6 +28,7 @@ public class UpdateConfigs {
         config.load();
         ConfigCategory catPos = config.getCategory("position");
         config.getCategory("gui").get("selection").set(Main.selection);
+        config.getCategory("gui").get("displayText").set(Main.displayText);
         catPos.get("customX").set(Main.customX);
         catPos.get("customY").set(Main.customY);
         catPos.get("scalar").set(Main.scalar);
