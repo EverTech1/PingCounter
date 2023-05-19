@@ -62,6 +62,7 @@ public class SettingsGui extends GuiScreen {
     public void onGuiClosed() {
         Main.displayText = customText.getText().length()>0 ? customText.getText() : "Ping $[ping]ms";
         new UpdateConfigs().updatePos();
+        new UpdateConfigs().updateGui();
         super.onGuiClosed();
     }
     @Override
