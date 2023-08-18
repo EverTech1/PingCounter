@@ -17,7 +17,7 @@ import java.util.Timer;
 public class Main
 {
     public static final String MODID = "pingCounter";
-    public static final String VERSION = "1.7.1";
+    public static final String VERSION = "1.8.0";
     public static boolean hideSettingsButton = false;
     public static boolean enableTextShadow = true;
     public static float customX = 0;
@@ -58,7 +58,7 @@ public class Main
         displayText = config.get("gui", "displayText", "Ping: $[ping]ms").getString();
         config.save();
         ClientRegistry.registerKeyBinding(openSettings);
-        new Timer().schedule(new PingTimer(), 0, 5000);
+        new Timer().schedule(new PingTimer(), 0, 2000);
         MinecraftForge.EVENT_BUS.register(new Events());
     }
 }
