@@ -13,7 +13,7 @@ import org.lwjgl.input.Keyboard;
 import java.io.File;
 import java.util.Timer;
 
-@Mod(modid = Main.MODID, version = Main.VERSION, updateJSON = "https://gist.githubusercontent.com/EverTech1/62b9c537189b016db2e7525ccb0ddfde/raw/update.json")
+@Mod(modid = Main.MODID, version = Main.VERSION, updateJSON = "https://gist.githubusercontent.com/EverTech1/2a2b99b663a910156457a59ecec0375e/raw/updateModrinth.json")
 public class Main
 {
     public static final String MODID = "pingCounter";
