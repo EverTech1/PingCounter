@@ -17,7 +17,7 @@ import java.util.Timer;
 public class Main
 {
     public static final String MODID = "pingCounter";
-    public static final String VERSION = "1.8.0";
+    public static final String VERSION = "1.8.1";
     public static boolean hideSettingsButton = false;
     public static boolean enableTextShadow = true;
     public static float customX = 0;

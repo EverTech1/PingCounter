@@ -63,15 +63,7 @@ public class Events {
     }
     public void checkVersion(){
         ForgeVersion.CheckResult res = ForgeVersion.getResult(Loader.instance().activeModContainer());
-        if(res.status == ForgeVersion.Status.PENDING){
-            new Timer().schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    checkVersion();
-                }
-            }, 5000);
-        }
-        else{
+        if(res.status != ForgeVersion.Status.PENDING){
             if(res.status == ForgeVersion.Status.OUTDATED && !updateCheck){
                 mc.thePlayer.addChatComponentMessage(new ChatComponentText("Ping counter mod is outdated, please update to latest version."));
                 mc.thePlayer.addChatComponentMessage(ForgeHooks.newChatWithLinks("https://modrinth.com/mod/ping-counter"));
