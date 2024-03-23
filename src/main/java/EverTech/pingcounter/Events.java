@@ -17,8 +17,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static EverTech.pingcounter.Main.scalar;
 
@@ -63,15 +61,7 @@ public class Events {
     }
     public void checkVersion(){
         ForgeVersion.CheckResult res = ForgeVersion.getResult(Loader.instance().activeModContainer());
-        if(res.status == ForgeVersion.Status.PENDING){
-            new Timer().schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    checkVersion();
-                }
-            }, 5000);
-        }
-        else{
+        if(res.status != ForgeVersion.Status.PENDING){
             if(res.status == ForgeVersion.Status.OUTDATED && !updateCheck){
                 mc.thePlayer.addChatComponentMessage(new ChatComponentText("Ping counter mod is outdated, please update to latest version."));
                 mc.thePlayer.addChatComponentMessage(ForgeHooks.newChatWithLinks("https://www.curseforge.com/minecraft/mc-mods/pingcounter"));
