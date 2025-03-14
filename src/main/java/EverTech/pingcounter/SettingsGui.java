@@ -7,47 +7,50 @@ import net.minecraftforge.fml.client.config.GuiSlider;
 import java.io.IOException;
 
 public class SettingsGui extends GuiScreen {
-    public Minecraft mc = Minecraft.getMinecraft();
-    final private boolean fromKeybind;
+
+    private Minecraft mc = Minecraft.getMinecraft();
+
+    private final ScaledResolution res = new ScaledResolution(mc);
+    private final int scaledWidth = res.getScaledWidth();
+    private final int scaledHeight = res.getScaledHeight();
+
+    private final int boxWidth = 400;
+    private final int boxHeight = 230;
+    private final int boxCornerX = (scaledWidth/2)-(boxWidth/2);
+    private final int boxCornerY = (scaledHeight/2)-(boxHeight/2);
+
+    private final boolean fromKeybind;
+
     public SettingsGui(boolean fromKeybind){
         this.fromKeybind = fromKeybind;
     }
-    int scaledWidth = new ScaledResolution(mc).getScaledWidth();
-    int scaledHeight = new ScaledResolution(mc).getScaledHeight();
-    private final int size = Minecraft.getMinecraft().fontRendererObj.getStringWidth("Ping: ms ");
-    private final int numSize = Minecraft.getMinecraft().fontRendererObj.getStringWidth("999");
-    private final String[][] strings = {
-            {"Top Left", "10", "10"}, {"Top Center",Integer.toString((scaledWidth/2)-size),"10"}, {"Top Right", Integer.toString((scaledWidth-size)-10-numSize), "10"},
-            {"Middle Left","10" ,Integer.toString(scaledHeight/2) }, {"Middle Center",Integer.toString((scaledWidth/2)-size), Integer.toString(scaledHeight/2)}, {"Middle Right",Integer.toString(scaledWidth-size-10-numSize) ,Integer.toString(scaledHeight/2) },
-            {"Bottom Left","10", Integer.toString(scaledHeight-10)}, {"Bottom Center",Integer.toString((scaledWidth/2)-size),Integer.toString(scaledHeight-10) }, {"Bottom Right",Integer.toString(scaledWidth-size-10-numSize), Integer.toString(scaledHeight-10)},
-            {"Custom", String.valueOf(Main.customX), String.valueOf(Main.customY)}
-    };
-    private final GuiSlider scalarSlider = new GuiSlider(5, (scaledWidth/2)-180, (scaledHeight/2)+20,256, 20, "Scale: ", "", 0.1, 3, Main.scalar, true, true);
-    private GuiTextField customText;
+    private final int backStringSize = mc.fontRendererObj.getStringWidth("Back");
+    private final GuiButton backButton = new GuiButton(0,(scaledWidth/2)-(backStringSize/2)-30, boxCornerY+boxHeight-30, backStringSize+60, 20, "Back") ;
+    private final GuiButton toggleButton = new GuiButton(1, boxCornerX+20, boxCornerY+30, mc.fontRendererObj.getStringWidth("Disabled")+20, 20, Main.enableDisplay ? "Enabled" : "Disabled");
+    private final GuiButton colorSettingsButton = new GuiButton(2, boxCornerX+20, boxCornerY+60,mc.fontRendererObj.getStringWidth("Color Settings")+20, 20, "Color Settings");
+    private final GuiButton positionSettingsButton = new GuiButton(3, boxCornerX+20, boxCornerY+90, mc.fontRendererObj.getStringWidth("Edit Position")+20, 20, "Edit Position");
+    private final GuiSlider scalarSlider = new GuiSlider(5, boxCornerX+20, boxCornerY+120,256, 20, "Scale: ", "", 0.1, 3, Main.scalar, true, true);
+    private final GuiTextField customText = new GuiTextField(6, mc.fontRendererObj, boxCornerX+20, boxCornerY+150, 256, 20);
+    private final GuiButton resetTextButton = new GuiButton(7, boxCornerX+290, boxCornerY+150, mc.fontRendererObj.getStringWidth("Reset")+60, 20, "Reset");
+
     @Override
     public void initGui() {
         super.initGui();
+        System.out.println(mc.fontRendererObj.getStringWidth("Reset")+60);
         mc.updateDisplay();
-        int stringSize = mc.fontRendererObj.getStringWidth("Back");
-        buttonList.add(new GuiButton(0,(scaledWidth/2)-(stringSize/2)-30, (scaledHeight/2)+100, stringSize+60, 20, "Back"));
-        buttonList.add(new GuiButton(1, (scaledWidth/2)-180, (scaledHeight/2)-70, mc.fontRendererObj.getStringWidth("Toggle")+20, 20, "Toggle"));
-        buttonList.add(new GuiButton(2, (scaledWidth/2)-180, (scaledHeight/2)-40, mc.fontRendererObj.getStringWidth("Change Position")+20, 20, "Change Position"));
-        buttonList.add(new GuiButton(3, (scaledWidth/2)-180, (scaledHeight/2)-10,mc.fontRendererObj.getStringWidth("Color Settings")+20, 20, "Color Settings"));
-        buttonList.add(new GuiButton(4, (scaledWidth/2)+30, (scaledHeight/2)-40, mc.fontRendererObj.getStringWidth("Edit Position")+20, 20, "Edit Position"));
-        buttonList.add(new GuiButton(7, (scaledWidth/2)+86, (scaledHeight/2)+50, mc.fontRendererObj.getStringWidth("Reset")+60, 20, "Reset"));
+        buttonList.add(backButton);
+        buttonList.add(toggleButton);
+        buttonList.add(colorSettingsButton);
+        buttonList.add(positionSettingsButton);
+        buttonList.add(resetTextButton);
         buttonList.add(scalarSlider);
-        customText = new GuiTextField(6, mc.fontRendererObj, (scaledWidth/2)-180, (scaledHeight/2)+50, 256, 20);
         customText.setText(Main.displayText);
-
     }
+
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawRect((scaledWidth/2)-200,(scaledHeight/2)-100, (scaledWidth/2)+200, (scaledHeight/2)+130, 0xA0000000);
-        buttonList.get(4).visible = Main.selection == 9;
-        drawString(mc.fontRendererObj, "Ping Counter settings", (scaledWidth/2)-190, (scaledHeight/2)-90, 0xFFFFFF);
-        String toWrite = Main.enableDisplay ? "Enabled" : "Disabled";
-        drawString(mc.fontRendererObj, toWrite, (scaledWidth/2)-140+mc.fontRendererObj.getStringWidth("Toggle"), (scaledHeight/2)-65, 0xFFFFFF);
-        drawString(mc.fontRendererObj, strings[Main.selection][0], (scaledWidth/2)-140+mc.fontRendererObj.getStringWidth("Change Position"), (scaledHeight/2)-35, 0xFFFFFF);
+        drawRect(boxCornerX,boxCornerY, boxCornerX+boxWidth, boxCornerY+boxHeight, 0xA0000000);
+        drawString(mc.fontRendererObj, "Ping Counter settings", boxCornerX+20, boxCornerY+10, 0xFFFFFF);
         customText.drawTextBox();
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
@@ -60,7 +63,7 @@ public class SettingsGui extends GuiScreen {
 
     @Override
     public void onGuiClosed() {
-        Main.displayText = customText.getText().length()>0 ? customText.getText() : "Ping $[ping]ms";
+        Main.displayText = !customText.getText().isEmpty() ? customText.getText() : "Ping $[ping]ms";
         new UpdateConfigs().updatePos();
         new UpdateConfigs().updateGui();
         super.onGuiClosed();
@@ -78,14 +81,12 @@ public class SettingsGui extends GuiScreen {
                 break;
             case 1:
                 Main.enableDisplay = !Main.enableDisplay;
+                toggleButton.displayString = Main.enableDisplay ? "Enabled" : "Disabled";
                 break;
             case 2:
-                Main.selection = (Main.selection + 1)%10;
-                break;
-            case 3:
                 mc.displayGuiScreen(new ColorSettingsGui(this));
                 break;
-            case 4:
+            case 3:
                 mc.displayGuiScreen(new PositionGui(this));
                 break;
             case 7:
@@ -102,6 +103,7 @@ public class SettingsGui extends GuiScreen {
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         customText.textboxKeyTyped(typedChar, keyCode);
+        Main.displayText = customText.getText();
         super.keyTyped(typedChar, keyCode);
     }
 
