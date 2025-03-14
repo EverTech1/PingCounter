@@ -46,12 +46,11 @@ public class ColorSettingsGui extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawRect((scaledWidth/2)-200,(scaledHeight/2)-150, (scaledWidth/2)+200, (scaledHeight/2)+130, 0xA0000000);
-        drawString(mc.fontRendererObj,"Background:", (scaledWidth/2)-180, (scaledHeight/2)-115, 0xFFFFFF);
-        drawString(mc.fontRendererObj,"Text:", (scaledWidth/2)-180, (scaledHeight/2)+5, 0xFFFFFF);
+        drawString(mc.fontRendererObj,"Text:", (scaledWidth/2)-180, (scaledHeight/2)-15, 0xFFFFFF);
+        drawString(mc.fontRendererObj,"Background:", (scaledWidth/2)-180, (scaledHeight/2)-135, 0xFFFFFF);
         String enableShadowText = Main.enableTextShadow ? "Enabled" : "Disabled";
         drawString(mc.fontRendererObj, enableShadowText, (scaledWidth/2)-160+buttonList.get(8).width, (scaledHeight/2)+75, 0xFFFFFF);
         super.drawScreen(mouseX, mouseY, partialTicks);
-
     }
 
     @Override
