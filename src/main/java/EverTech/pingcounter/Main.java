@@ -32,6 +32,7 @@ public class Main
     public static float alphaValBg = 0.5F;
     public static double scalar = 1;
     public static boolean enableDisplay = true;
+    public static boolean useOldPingMethod = false;
     public static String displayText = "Ping: $[ping]ms";
     public static KeyBinding openSettings = new KeyBinding("Open settings", Keyboard.KEY_SUBTRACT, "PingCounter");
     @EventHandler
