@@ -11,7 +11,9 @@ public class PingTimer extends TimerTask {
         if (Minecraft.getMinecraft().theWorld != null) {
             try {
                 if (mc.getIntegratedServer() == null) {
-                    new PingServer(mc.getCurrentServerData());
+                    PingServer pinger = new PingServer(mc.getCurrentServerData());
+                    if(Main.useOldPingMethod) pinger.sendPingOld();
+                    else pinger.sendPing();
                 }
                 else{
                     Events.latency = 0;

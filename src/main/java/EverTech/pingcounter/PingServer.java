@@ -24,15 +24,11 @@ import java.net.UnknownHostException;
 
 @SideOnly(Side.CLIENT)
 public class PingServer {
-    PingServer(ServerData server){
-        try {
-            sendPing(server);
-        }
-        catch(Throwable err){
-            err.printStackTrace();
-        }
+    private final ServerData server;
+    PingServer(ServerData server) {
+        this.server = server;
     }
-    private void sendPing(ServerData server) throws IOException {
+    public void sendPingOld() throws IOException {
         ServerAddress address = ServerAddress.fromString(server.serverIP);
         Socket s = new Socket();
         s.setSoTimeout(5000);
@@ -40,5 +36,30 @@ public class PingServer {
         s.connect(new InetSocketAddress(address.getIP(), address.getPort()));
         s.close();
         Events.latency = System.currentTimeMillis() - timeBefore;
+    }
+    public void sendPing() throws IOException {
+        ServerAddress addr = ServerAddress.fromString(server.serverIP);
+        final NetworkManager networkmanager = NetworkManager.createNetworkManagerAndConnect(InetAddress.getByName(addr.getIP()), addr.getPort(), false);
+        networkmanager.setNetHandler(new INetHandlerStatusClient() {
+            @Override
+            public void onDisconnect(IChatComponent reason) {
+            }
+
+            long tBefore = 0L;
+            @Override
+            public void handleServerInfo(S00PacketServerInfo packetIn) {
+                tBefore = Minecraft.getSystemTime();
+                networkmanager.sendPacket(new C01PacketPing(tBefore));
+            }
+
+            @Override
+            public void handlePong(S01PacketPong packetIn) {
+                System.out.println("ass");
+                Events.latency = Minecraft.getSystemTime() - tBefore;
+                networkmanager.closeChannel(new ChatComponentText("Finished"));
+            }
+        });
+        networkmanager.sendPacket(new C00Handshake(47, addr.getIP(), addr.getPort(), EnumConnectionState.STATUS));
+        networkmanager.sendPacket(new C00PacketServerQuery());
     }
 }
