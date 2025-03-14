@@ -54,7 +54,6 @@ public class PingServer {
 
             @Override
             public void handlePong(S01PacketPong packetIn) {
-                System.out.println("ass");
                 Events.latency = Minecraft.getSystemTime() - tBefore;
                 networkmanager.closeChannel(new ChatComponentText("Finished"));
             }
