@@ -20,9 +20,8 @@ public class Main
     public static final String VERSION = "1.9.0";
     public static boolean hideSettingsButton = false;
     public static boolean enableTextShadow = true;
-    public static float customX = 0;
-    public static float customY = 0;
-    public static int selection = 0;
+    public static float customX = 0.024f;
+    public static float customY = 0.035f;
     public static int redValText = 255;
     public static int greenValText = 255;
     public static int blueValText = 255;
@@ -42,11 +41,10 @@ public class Main
         config.load();
         hideSettingsButton = config.get("gui", "hideSettingsButton", false).getBoolean();
         enableTextShadow = config.get("color", "enableTextShadow", true).getBoolean();
-        float tempCustomX = (float)config.get("position", "customX", 0.0).getDouble();
-        float tempCustomY = (float)config.get("position", "customY", 0.0).getDouble();
-        customX = tempCustomX > 1 ? 0 : tempCustomX;
-        customY = tempCustomY > 1 ? 0 : tempCustomY;
-        selection = config.get("gui", "selection", 0).getInt();
+        float tempCustomX = (float)config.get("position", "customX", 0.024f).getDouble();
+        float tempCustomY = (float)config.get("position", "customY", 0.035f).getDouble();
+        customX = tempCustomX > 1 ? 0.024f : tempCustomX;
+        customY = tempCustomY > 1 ? 0.035f : tempCustomY;
         enableDisplay = config.get("gui", "enableDisplay", true).getBoolean();
         redValText = config.get("color", "rVal", 255).getInt();
         greenValText = config.get("color", "gVal", 255).getInt();

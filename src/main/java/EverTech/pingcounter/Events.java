@@ -75,13 +75,7 @@ public class Events {
         int scaledWidth = scaled.getScaledWidth();
         final int size = Minecraft.getMinecraft().fontRendererObj.getStringWidth(Main.displayText.replaceAll("(\\$\\[ping])", ""));
         final int numSize = Minecraft.getMinecraft().fontRendererObj.getStringWidth("999")*(Main.displayText.split("(\\$\\[ping])", -1).length-1);
-        final int[][] nums = {
-                {10, 10}, {(scaledWidth/2)-size,10}, {scaledWidth-size-numSize-10, 10},
-                {10 ,scaledHeight/2}, {(scaledWidth/2)-size, scaledHeight/2}, {scaledWidth-size-numSize-10 ,scaledHeight/2},
-                {10, scaledHeight-10-mc.fontRendererObj.FONT_HEIGHT}, {(scaledWidth/2)-size,scaledHeight-10-mc.fontRendererObj.FONT_HEIGHT}, {scaledWidth-size-numSize-10, scaledHeight-10-mc.fontRendererObj.FONT_HEIGHT},
-                {Math.round(Main.customX*scaledWidth), Math.round(Main.customY*scaledHeight)}
-        };
-        int sel = Main.selection;
+        final int[] pos = {Math.round(Main.customX*scaledWidth), Math.round(Main.customY*scaledHeight)};
         String modifiedDisplayString = Main.displayText.replaceAll("(\\$\\[ping])", String.valueOf(latency));
         GL11.glPushMatrix();
         GlStateManager.disableTexture2D();
@@ -90,17 +84,17 @@ public class Events {
         GL11.glColor4f((float)Main.redValBg/255, (float)Main.greenValBg/255,(float)Main.blueValBg/255, Main.alphaValBg);
         GL11.glBegin(GL11.GL_QUADS);
         {
-            GL11.glVertex2i(nums[sel][0]-(int)(5*scalar), nums[sel][1]-(int)(5* scalar));
-            GL11.glVertex2i(nums[sel][0]-(int)(5*scalar), nums[sel][1]+(int)((mc.fontRendererObj.FONT_HEIGHT+4)*scalar));
-            GL11.glVertex2i(nums[sel][0]+(int)((size+numSize+5)*scalar), nums[sel][1]+(int)((mc.fontRendererObj.FONT_HEIGHT+4)*scalar));
-            GL11.glVertex2i(nums[sel][0]+(int)((size+numSize+5)*scalar), nums[sel][1]-(int)(5*scalar));
+            GL11.glVertex2i(pos[0]-(int)(5*scalar), pos[1]-(int)(5* scalar));
+            GL11.glVertex2i(pos[0]-(int)(5*scalar), pos[1]+(int)((mc.fontRendererObj.FONT_HEIGHT+4)*scalar));
+            GL11.glVertex2i(pos[0]+(int)((size+numSize+5)*scalar), pos[1]+(int)((mc.fontRendererObj.FONT_HEIGHT+4)*scalar));
+            GL11.glVertex2i(pos[0]+(int)((size+numSize+5)*scalar), pos[1]-(int)(5*scalar));
 
         }
         GL11.glEnd();
         GlStateManager.enableTexture2D();
         GlStateManager.resetColor();
         GlStateManager.scale(scalar,scalar,scalar);
-        mc.fontRendererObj.drawString(modifiedDisplayString, (int)(nums[sel][0]/scalar), (int)(nums[sel][1]/scalar), new Color(Main.redValText, Main.greenValText, Main.blueValText).getRGB(), Main.enableTextShadow);
+        mc.fontRendererObj.drawString(modifiedDisplayString, (int)(pos[0]/scalar), (int)(pos[1]/scalar), new Color(Main.redValText, Main.greenValText, Main.blueValText).getRGB(), Main.enableTextShadow);
         GL11.glPopMatrix();
     }
 }
