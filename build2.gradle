@@ -1,12 +1,12 @@
-def updateURL_curseforge = "https://gist.githubusercontent.com/EverTech1/62b9c537189b016db2e7525ccb0ddfde/raw/update.json"
-def downloadURL_curseforge = "https://www.curseforge.com/minecraft/mc-mods/pingcounter"
+def updateURL_modrinth = "https://gist.githubusercontent.com/EverTech1/2a2b99b663a910156457a59ecec0375e/raw/updateModrinth.json"
+def downloadURL_modrinth = "https://modrinth.com/mod/ping-counter"
 def targetJavaFile = "src/main/java/EverTech/pingcounter/Constants.java"
 
 tasks.register("restoreFile"){
     doLast {
         def file = file(targetJavaFile)
-        file.text = file.text.replace(updateURL_curseforge, "PLACEHOLDER_REPLACE_UPDATE")
-        file.text = file.text.replace(downloadURL_curseforge, "PLACEHOLDER_REPLACE_DOWNLOAD")
+        file.text = file.text.replace(updateURL_modrinth, "PLACEHOLDER_REPLACE_UPDATE")
+        file.text = file.text.replace(downloadURL_modrinth, "PLACEHOLDER_REPLACE_DOWNLOAD")
     }
     finalizedBy deleteLibsFile
 }
@@ -19,15 +19,15 @@ tasks.register("deleteLibsFile"){
 tasks.register('modifyConstants') {
     doLast {
         def file = file(targetJavaFile)
-        file.text = file.text.replace("PLACEHOLDER_REPLACE_UPDATE", updateURL_curseforge)
-        file.text = file.text.replace("PLACEHOLDER_REPLACE_DOWNLOAD", downloadURL_curseforge)
+        file.text = file.text.replace("PLACEHOLDER_REPLACE_UPDATE", updateURL_modrinth)
+        file.text = file.text.replace("PLACEHOLDER_REPLACE_DOWNLOAD", downloadURL_modrinth)
     }
 }
 
-tasks.register("reobfCurseforge", Copy){
+tasks.register("reobfModrinth", Copy){
     dependsOn modifyConstants, reobfJar
     from "$buildDir/libs/$archivesBaseName-$version"+".jar"
-    into "$buildDir/reobf/curseforge/"
+    into "$buildDir/reobf/modrinth/"
     finalizedBy restoreFile
 }
 

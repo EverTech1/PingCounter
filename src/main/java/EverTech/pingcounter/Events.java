@@ -64,7 +64,7 @@ public class Events {
         if(res.status != ForgeVersion.Status.PENDING){
             if(res.status == ForgeVersion.Status.OUTDATED && !updateCheck){
                 mc.thePlayer.addChatComponentMessage(new ChatComponentText("Ping counter mod is outdated, please update to latest version."));
-                mc.thePlayer.addChatComponentMessage(ForgeHooks.newChatWithLinks("https://www.curseforge.com/minecraft/mc-mods/pingcounter"));
+                mc.thePlayer.addChatComponentMessage(ForgeHooks.newChatWithLinks(Constants.downloadURL));
             }
             updateCheck = true;
         }
