@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "EverTech1.pingcounter.Mixins",
+  "compatibilityLevel": "JAVA_21",
+  "refmap": "mixins.pingcounter.refmap.json",
+  "mixins": [
+    "DrawTextMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

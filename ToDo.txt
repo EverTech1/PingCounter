@@ -1,3 +1,0 @@
-In the future:
-    - Port to other versions
-    - Port to fabric
