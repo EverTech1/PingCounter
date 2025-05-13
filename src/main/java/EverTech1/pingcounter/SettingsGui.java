@@ -69,6 +69,8 @@ public class SettingsGui extends Screen {
                     Config.enabled = !Config.enabled;
                     toggleButton.setMessage(Component.literal(Config.enabled?"Enabled":"Disabled"));
                     break;
+                case 3:
+                    minecraft.setScreen(new EditPositionGui(Component.literal("Edit Position"), this));
                 case 4:
                     editBox.setValue("Ping: $[ping]ms");
                     break;
