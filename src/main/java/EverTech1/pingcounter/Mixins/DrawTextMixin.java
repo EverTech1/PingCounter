@@ -29,9 +29,9 @@ public class DrawTextMixin {
             final String displayString = String.format(Config.displayText, Pinger.latency);
             final String measureString = String.format(Config.displayText, 999);
             final int stringSize = font.width(measureString);
-            final double scale = 2*Config.scale/mc.getWindow().getGuiScale();
+            final double scale = 3*Config.scale/mc.getWindow().getGuiScale();
             guiGraphics.fill(pos[0]-(int)(5*scale), pos[1]-(int)(5*scale), pos[0]+(int)((stringSize+5)*scale), pos[1]+(int)((font.lineHeight+4)*scale), backgroundColor);
-            guiGraphics.pose().scale((float)scale, (float)scale, (float)scale);
+            guiGraphics.pose().scale((float)scale, (float)scale, 1);
             guiGraphics.drawString(font, String.format(displayString, Pinger.latency), (float)(pos[0]/scale), (float)(pos[1]/scale), textColor, Config.textShadow);
         }
         guiGraphics.pose().popPose();
