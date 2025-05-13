@@ -21,20 +21,18 @@ public class DrawTextMixin {
         guiGraphics.pose().pushPose();
         RenderSystem.enableBlend();
         if(Config.enabled){
-            Font font = Minecraft.getInstance().font;
+            Minecraft mc = Minecraft.getInstance();
+            Font font = mc.font;
             final int textColor = 0x10000*Config.textColorRed + 0x100*Config.textColorGreen + Config.textColorBlue;
             final int backgroundColor = 0x10000*Config.backgroundColorRed + 0x100*Config.backgroundColorGreen + Config.backgroundColorBlue + 0x1000000*Config.backgroundColorAlpha;
-            final int[] pos = {20, 20};
+            final int[] pos = {(int) (mc.getWindow().getGuiScaledWidth()*Config.posX), (int) (mc.getWindow().getGuiScaledHeight()*Config.posY)};
             final String displayString = String.format(Config.displayText, Pinger.latency);
             final String measureString = String.format(Config.displayText, 999);
             final int stringSize = font.width(measureString);
-            final double scale = Config.scale;
-            RenderSystem.enableBlend();
+            final double scale = 2*Config.scale/mc.getWindow().getGuiScale();
             guiGraphics.fill(pos[0]-(int)(5*scale), pos[1]-(int)(5*scale), pos[0]+(int)((stringSize+5)*scale), pos[1]+(int)((font.lineHeight+4)*scale), backgroundColor);
-
             guiGraphics.pose().scale((float)scale, (float)scale, (float)scale);
-            guiGraphics.drawString(font, String.format(displayString, Pinger.latency), (int)(pos[0]/scale), (int)(pos[1]/scale), textColor, Config.textShadow);
-            RenderSystem.disableBlend();
+            guiGraphics.drawString(font, String.format(displayString, Pinger.latency), (float)(pos[0]/scale), (float)(pos[1]/scale), textColor, Config.textShadow);
         }
         guiGraphics.pose().popPose();
         RenderSystem.disableBlend();
