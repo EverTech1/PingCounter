@@ -73,6 +73,7 @@ public class EditPositionGui extends Screen {
 
     @Override
     public void onClose() {
+        Config.updateConfig();
         super.onClose();
     }
 }

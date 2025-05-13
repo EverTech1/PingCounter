@@ -19,7 +19,6 @@ public class DrawTextMixin {
     @Inject(method="render", at=@At("TAIL"))
     private void renderCustomText(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci){
         guiGraphics.pose().pushPose();
-        RenderSystem.enableBlend();
         if(Config.enabled){
             Minecraft mc = Minecraft.getInstance();
             Font font = mc.font;
@@ -35,7 +34,5 @@ public class DrawTextMixin {
             guiGraphics.drawString(font, String.format(displayString, Pinger.latency), (float)(pos[0]/scale), (float)(pos[1]/scale), textColor, Config.textShadow);
         }
         guiGraphics.pose().popPose();
-        RenderSystem.disableBlend();
-
     }
 }
