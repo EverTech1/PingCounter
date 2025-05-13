@@ -2,6 +2,7 @@ package EverTech1.pingcounter.Mixins;
 
 import EverTech1.pingcounter.Config;
 import EverTech1.pingcounter.Pinger;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -17,6 +18,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class DrawTextMixin {
     @Inject(method="render", at=@At("TAIL"))
     private void renderCustomText(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci){
+        guiGraphics.pose().pushPose();
+        RenderSystem.enableBlend();
         if(Config.enabled){
             Font font = Minecraft.getInstance().font;
             final int textColor = 0x10000*Config.textColorRed + 0x100*Config.textColorGreen + Config.textColorBlue;
@@ -26,11 +29,15 @@ public class DrawTextMixin {
             final String measureString = String.format(Config.displayText, 999);
             final int stringSize = font.width(measureString);
             final double scale = Config.scale;
+            RenderSystem.enableBlend();
             guiGraphics.fill(pos[0]-(int)(5*scale), pos[1]-(int)(5*scale), pos[0]+(int)((stringSize+5)*scale), pos[1]+(int)((font.lineHeight+4)*scale), backgroundColor);
-            guiGraphics.pose().pushPose();
+
             guiGraphics.pose().scale((float)scale, (float)scale, (float)scale);
             guiGraphics.drawString(font, String.format(displayString, Pinger.latency), (int)(pos[0]/scale), (int)(pos[1]/scale), textColor, Config.textShadow);
-            guiGraphics.pose().popPose();
+            RenderSystem.disableBlend();
         }
+        guiGraphics.pose().popPose();
+        RenderSystem.disableBlend();
+
     }
 }
