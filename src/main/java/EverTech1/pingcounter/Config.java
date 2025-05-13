@@ -26,20 +26,32 @@ public class Config
 
     public static boolean enabled;
 
-    public static int textColorRed = textColorRedConfig.get();
-    public static int textColorGreen = textColorGreenConfig.get();
-    public static int textColorBlue = textColorBlueConfig.get();
+    public static int textColorRed;
+    public static int textColorGreen;
+    public static int textColorBlue;
 
-    public static int backgroundColorAlpha = backgroundColorAlphaConfig.get();
-    public static int backgroundColorRed = backgroundColorRedConfig.get();
-    public static int backgroundColorGreen = backgroundColorGreenConfig.get();
-    public static int backgroundColorBlue = backgroundColorBlueConfig.get();
+    public static int backgroundColorAlpha;
+    public static int backgroundColorRed;
+    public static int backgroundColorGreen;
+    public static int backgroundColorBlue;
 
-    public static double offsetX = offsetXConfig.get();
-    public static double offsetY = offsetYConfig.get();
+    public static double offsetX;
+    public static double offsetY;
 
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event) {
         enabled = enabledConfig.get();
+        textColorRed = textColorRedConfig.get();
+        textColorGreen = textColorGreenConfig.get();
+        textColorBlue = textColorBlueConfig.get();
+
+        backgroundColorAlpha = backgroundColorAlphaConfig.get();
+        backgroundColorRed = backgroundColorRedConfig.get();
+        backgroundColorGreen = backgroundColorGreenConfig.get();
+        backgroundColorBlue = backgroundColorBlueConfig.get();
+
+        offsetX = offsetXConfig.get();
+        offsetY = offsetYConfig.get();
+
     }
 }
