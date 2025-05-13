@@ -1,6 +1,5 @@
 package EverTech1.pingcounter;
 
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -19,8 +18,11 @@ public class Config
     private static final ForgeConfigSpec.IntValue backgroundColorRedConfig = BUILDER.defineInRange("backgroundColorRed", 0, 0, 255);
     private static final ForgeConfigSpec.IntValue backgroundColorGreenConfig = BUILDER.defineInRange("backgroundColorRed", 0, 0, 255);
     private static final ForgeConfigSpec.IntValue backgroundColorBlueConfig = BUILDER.defineInRange("backgroundColorRed", 0, 0, 255);
+    private static final ForgeConfigSpec.BooleanValue textShadowConfig = BUILDER.define("textShadow", true);
+    private static final ForgeConfigSpec.DoubleValue scaleConfig = BUILDER.defineInRange("scale", 1.0, 0.0, 10.0);
     private static final ForgeConfigSpec.DoubleValue offsetXConfig = BUILDER.defineInRange("offsetX", 0.45, 0.0, 1.0);
     private static final ForgeConfigSpec.DoubleValue offsetYConfig = BUILDER.defineInRange("offsetY", 0.45, 0.0, 1.0);
+    private static final ForgeConfigSpec.ConfigValue<String> displayTextConfig = BUILDER.define("displayText", "Ping %1$dms");
 
     static final ForgeConfigSpec SPEC = BUILDER.build();
 
@@ -34,9 +36,13 @@ public class Config
     public static int backgroundColorRed;
     public static int backgroundColorGreen;
     public static int backgroundColorBlue;
-
+    public static boolean textShadow;
+    public static double scale;
     public static double offsetX;
     public static double offsetY;
+    public static String displayText;
+
+
 
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event) {
@@ -49,9 +55,12 @@ public class Config
         backgroundColorRed = backgroundColorRedConfig.get();
         backgroundColorGreen = backgroundColorGreenConfig.get();
         backgroundColorBlue = backgroundColorBlueConfig.get();
+        textShadow = textShadowConfig.get();
+        scale = scaleConfig.get();
 
         offsetX = offsetXConfig.get();
         offsetY = offsetYConfig.get();
+        displayText = displayTextConfig.get();
 
     }
 }
