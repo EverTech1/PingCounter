@@ -22,8 +22,8 @@ public class Main
 {
     public static final String MODID = "pingcounter";
     private static final Logger LOGGER = LogUtils.getLogger();
-    public static float textOffset = 0;
     public static KeyMapping keyMap = new KeyMapping("key.pingcounter.open_settings", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_MINUS, "key.categories.misc");
+    public static Pinger pinger;
     public Main()
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -31,11 +31,11 @@ public class Main
         modEventBus.addListener(this::registerKeys);
         modEventBus.register(keyMap);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        pinger = new Pinger();
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
-
     }
     private void registerKeys(final RegisterKeyMappingsEvent event){
         event.register(keyMap);
