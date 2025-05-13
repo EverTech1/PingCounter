@@ -113,7 +113,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 repositories {
     // Put repositories for dependencies here
     // ForgeGradle automatically adds the Forge maven and Maven Central for you
-
+    maven {url "https://repo.spongepowered.org/maven"}
     // If you have mod jar dependencies in ./libs, you can declare them as a repository like so.
     // See https://docs.gradle.org/current/userguide/declaring_repositories.html#sub:flat_dir_resolver
     // flatDir {
@@ -144,7 +144,8 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
     
-    // Hack fix for now, force jopt-simple to be exactly 5.0.4 because Mojang ships that version, but some transitive dependencies request 6.0+ 
+    // Hack fix for now, force jopt-simple to be exactly 5.0.4 because Mojang ships that version, but some transitive dependencies request 6.0+
+
     implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
@@ -153,7 +154,11 @@ mixin {
     add sourceSets.main, 'mixins.pingcounter.refmap.json'
     config 'mixins.pingcounter.json'
 }
-
+sourceSets {
+    main {
+        ext.refMap = "${mod_id}.refmap.json"
+    }
+}
 
 // This block of code expands all declared replace properties in the specified resource targets.
 // A missing property will result in an error. Properties are expanded using ${} Groovy notation.
@@ -167,11 +172,15 @@ tasks.named('processResources', ProcessResources).configure {
             mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
             mod_authors: mod_authors, mod_description: mod_description,
     ]
+    from("$buildDir/classes/java") {
+        include '**/*.refmap.json'
+    }
     inputs.properties replaceProperties
 
     filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
         expand replaceProperties + [project: project]
     }
+
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
@@ -183,7 +192,8 @@ tasks.named('jar', Jar).configure {
             'Specification-Version'   : '1', // We are version 1 of ourselves
             'Implementation-Title'    : project.name,
             'Implementation-Version'  : project.jar.archiveVersion,
-            'Implementation-Vendor'   : mod_authors
+            'Implementation-Vendor'   : mod_authors,
+            'MixinConfigs'            : "mixins.${mod_id}.json"
         ])
     }
 }
