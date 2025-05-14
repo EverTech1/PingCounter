@@ -22,7 +22,7 @@ public class Events {
 
     @SubscribeEvent
     public static void onJoinServer(ClientPlayerNetworkEvent.LoggingIn event){
-        Main.pinger.startPinging(2000);
+        Main.pinger.startPinging(5000);
     }
 
     @SubscribeEvent
