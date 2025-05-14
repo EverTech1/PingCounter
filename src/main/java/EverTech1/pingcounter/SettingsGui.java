@@ -16,15 +16,13 @@ public class SettingsGui extends Screen {
     private Minecraft minecraft;
     private final int boxWidth = 400;
     private final int boxHeight = 230;
-    private Screen parentScreen;
     private int boxCornerX;
     private int boxCornerY;
     private Button toggleButton;
     private EditBox editBox;
     private ForgeSlider scaleSlider;
-    protected SettingsGui(Component pTitle, Screen parent) {
+    protected SettingsGui(Component pTitle) {
         super(pTitle);
-        parentScreen = parent;
     }
 
     @Override
@@ -69,8 +67,12 @@ public class SettingsGui extends Screen {
                     Config.enabled = !Config.enabled;
                     toggleButton.setMessage(Component.literal(Config.enabled?"Enabled":"Disabled"));
                     break;
+                case 2:
+                    minecraft.setScreen(new ColorSettingsGui(Component.literal("Edit color"), this));
+                    break;
                 case 3:
                     minecraft.setScreen(new EditPositionGui(Component.literal("Edit Position"), this));
+                    break;
                 case 4:
                     editBox.setValue("Ping: $[ping]ms");
                     break;
