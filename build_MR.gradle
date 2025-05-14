@@ -8,8 +8,8 @@ plugins {
 }
 
 def targetJavaFile = "src/main/resources/META-INF/mods.toml"
-def updateURL_curseforge = "https://gist.githubusercontent.com/EverTech1/62b9c537189b016db2e7525ccb0ddfde/raw/update.json"
-def downloadURL_curseforge = "https://www.curseforge.com/minecraft/mc-mods/pingcounter"
+def updateURL_modrinth = "https://gist.githubusercontent.com/EverTech1/2a2b99b663a910156457a59ecec0375e/raw/updateModrinth.json"
+def downloadURL_modrinth = "https://modrinth.com/mod/ping-counter"
 
 version = mod_version
 group = mod_group_id
@@ -93,22 +93,22 @@ tasks.register("deleteLibsFile"){
 }
 tasks.register("copyFiles", Copy){
     from "$projectDir/build/libs/$archivesBaseName-$version"+".jar"
-    into "$projectDir/build/jars/curseforge/"
+    into "$projectDir/build/jars/modrinth/"
     finalizedBy deleteLibsFile
 }
 tasks.register("restoreFiles"){
     doLast {
         def file = file(targetJavaFile)
-        file.text = file.text.replace(updateURL_curseforge, "PLACEHOLDER_JSON")
-        file.text = file.text.replace(downloadURL_curseforge, "PLACEHOLDER_DOWNLOAD")
+        file.text = file.text.replace(updateURL_modrinth, "PLACEHOLDER_JSON")
+        file.text = file.text.replace(downloadURL_modrinth, "PLACEHOLDER_DOWNLOAD")
     }
 }
 
 tasks.register("modifyConstants"){
     doLast{
         def file = file(targetJavaFile)
-        file.text = file.text.replace("PLACEHOLDER_JSON", updateURL_curseforge)
-        file.text = file.text.replace("PLACEHOLDER_DOWNLOAD", downloadURL_curseforge)
+        file.text = file.text.replace("PLACEHOLDER_JSON", updateURL_modrinth)
+        file.text = file.text.replace("PLACEHOLDER_DOWNLOAD", downloadURL_modrinth)
     }
 }
 tasks.named('build'){
@@ -121,13 +121,13 @@ tasks.named('compileJava'){
 tasks.named('jar', Jar).configure {
     manifest {
         attributes([
-            'Specification-Title'     : mod_id,
-            'Specification-Vendor'    : mod_authors,
-            'Specification-Version'   : '1', // We are version 1 of ourselves
-            'Implementation-Title'    : project.name,
-            'Implementation-Version'  : project.jar.archiveVersion,
-            'Implementation-Vendor'   : mod_authors,
-            'MixinConfigs'            : "mixins.${mod_id}.json"
+                'Specification-Title'     : mod_id,
+                'Specification-Vendor'    : mod_authors,
+                'Specification-Version'   : '1', // We are version 1 of ourselves
+                'Implementation-Title'    : project.name,
+                'Implementation-Version'  : project.jar.archiveVersion,
+                'Implementation-Vendor'   : mod_authors,
+                'MixinConfigs'            : "mixins.${mod_id}.json"
         ])
     }
 }
