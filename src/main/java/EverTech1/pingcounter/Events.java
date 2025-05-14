@@ -2,10 +2,12 @@ package EverTech1.pingcounter;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
+import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
@@ -45,6 +47,16 @@ public class Events {
     @SubscribeEvent
     public static void onLeaveServer(ClientPlayerNetworkEvent.LoggingOut event){
         Main.pinger.stopPinging();
+    }
+
+    @SubscribeEvent
+    public static void registerCommands(RegisterClientCommandsEvent event){
+        event.getDispatcher().register(
+                Commands.literal("pingcounter").executes(contex->{
+                    Minecraft.getInstance().setScreen(new SettingsGui(CommonComponents.EMPTY));
+                    return 1;
+                })
+        );
     }
 
 }
