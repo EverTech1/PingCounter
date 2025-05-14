@@ -81,6 +81,7 @@ public class SettingsGui extends Screen {
     @Override
     public void onClose() {
         Config.displayText = editBox.getValue().replaceAll("%", "%%%%").replaceAll("(\\$\\[ping])", Matcher.quoteReplacement("%1$d"));
+        Config.updateConfig();
         super.onClose();
     }
 
