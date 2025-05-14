@@ -112,11 +112,11 @@ tasks.register("modifyConstants"){
     }
 }
 tasks.named('build'){
-    dependsOn restoreFiles
     finalizedBy copyFiles
 }
 tasks.named('compileJava'){
     dependsOn modifyConstants
+    finalizedBy restoreFiles
 }
 tasks.named('jar', Jar).configure {
     manifest {
