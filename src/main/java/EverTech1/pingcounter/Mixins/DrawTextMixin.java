@@ -2,7 +2,6 @@ package EverTech1.pingcounter.Mixins;
 
 import EverTech1.pingcounter.Config;
 import EverTech1.pingcounter.Pinger;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;

@@ -65,8 +65,8 @@ public class EditPositionGui extends Screen {
             if(id==0){
                 mc.setScreen(parent);
             }else{
-                Config.posX = 0.1;
-                Config.posY = 0.07;
+                Config.posX = 0.028;
+                Config.posY = 0.05;
             }
         };
     }

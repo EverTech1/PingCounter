@@ -15,7 +15,7 @@ public class Events {
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
             while (Main.keyMap.consumeClick()) {
-              Minecraft.getInstance().setScreen(new SettingsGui(CommonComponents.EMPTY, Minecraft.getInstance().screen));
+              Minecraft.getInstance().setScreen(new SettingsGui(CommonComponents.EMPTY));
             }
         }
     }
