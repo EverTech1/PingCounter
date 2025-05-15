@@ -24,84 +24,29 @@ public class Pinger {
     public static long latency;
     public static boolean isPinging = false;
     private static Timer timer;
+    private long pingSent;
+    private boolean startPinging;
+    public static Connection connection;
     Minecraft mc;
     public Pinger(){
         mc = Minecraft.getInstance();
     }
     public void startPinging(int interval){
-        if(!isPinging){
-            isPinging = true;
+        if(!mc.isLocalServer()&&!isPinging) {
             timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    if(!mc.isLocalServer()){
-                       ServerData server = Minecraft.getInstance().getCurrentServer();
-                       if(server!=null){
-                           sendPing(server);
-                       }
-                       else{
-                           latency = 0;
-                       }
-                   }else{
-                       latency = 0;
-                   }
-               }
-            },
-            0,
-            interval
-            );
+                    connection.send(new ServerboundPingRequestPacket(Util.getMillis()));
+                }
+            }, 0, interval);
+            isPinging = true;
         }
     }
     public void stopPinging(){
         if(isPinging){
             timer.cancel();
             isPinging = false;
-        }
-    }
-    private void sendPing(ServerData serverData){
-        ServerAddress address = ServerAddress.parseString(serverData.ip);
-        Optional<InetSocketAddress> optional = ServerNameResolver.DEFAULT.resolveAddress(address).map(ResolvedServerAddress::asInetSocketAddress);
-        if(optional.isPresent()){
-            final InetSocketAddress inetsocketaddress = optional.get();
-            final Connection connection = Connection.connectToServer(inetsocketaddress, false, null);
-
-            ClientStatusPacketListener clientStatusPacketListener = new ClientStatusPacketListener() {
-                private boolean receivedPing;
-                private long pingStart;
-
-                @Override
-                public void handleStatusResponse(ClientboundStatusResponsePacket pPacket) {
-                    if(this.receivedPing) connection.disconnect(Component.translatable("multiplayer.status.unrequested"));
-                    else{
-                        this.receivedPing = true;
-                        this.pingStart = Util.getMillis();
-                        connection.send(new ServerboundPingRequestPacket(this.pingStart));
-                    }
-                }
-
-                @Override
-                public void handlePongResponse(ClientboundPongResponsePacket pPacket) {
-                    latency = Util.getMillis() - this.pingStart;
-                    connection.disconnect(Component.translatable("multiplayer.status.finished"));
-
-                }
-
-                @Override
-                public void onDisconnect(DisconnectionDetails pDetails) {
-
-                }
-
-                @Override
-                public boolean isAcceptingMessages() {
-                    return true;
-                }
-            };
-            try {
-                connection.initiateServerboundStatusConnection(address.getHost(), address.getPort(), clientStatusPacketListener);
-                connection.send(ServerboundStatusRequestPacket.INSTANCE);
-            } catch (Throwable ignored) {
-            }
         }
     }
 }

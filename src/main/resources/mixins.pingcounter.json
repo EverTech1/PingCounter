@@ -4,7 +4,8 @@
   "compatibilityLevel": "JAVA_21",
   "refmap": "mixins.pingcounter.refmap.json",
   "mixins": [
-    "DrawTextMixin"
+    "DrawTextMixin",
+    "PingMixin"
   ],
   "client": [],
   "injectors": {
