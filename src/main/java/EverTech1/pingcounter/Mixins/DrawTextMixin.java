@@ -15,10 +15,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Gui.class)
 public class DrawTextMixin {
-    @Inject(method="render", at=@At("TAIL"))
+    @Inject(method="renderChat", at=@At("TAIL"))
     private void renderCustomText(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci){
         guiGraphics.pose().pushPose();
-        if(Config.enabled && !Minecraft.getInstance().isLocalServer()){
+        if(Config.enabled && !Minecraft.getInstance().isLocalServer()&&!Minecraft.getInstance().gui.getDebugOverlay().showDebugScreen()){
             Minecraft mc = Minecraft.getInstance();
             Font font = mc.font;
             final int textColor = 0x10000*Config.textColorRed + 0x100*Config.textColorGreen + Config.textColorBlue;
