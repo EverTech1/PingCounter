@@ -13,15 +13,14 @@ import org.lwjgl.glfw.GLFW;
 @Mod(Main.MODID)
 public class Main
 {
-    public static boolean notified = false;
+    public static boolean notified = false; //User notified about latest version
     public static final String MODID = "pingcounter";
-    public static KeyMapping keyMap = new KeyMapping("key.pingcounter.open_settings", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_MINUS, "key.categories.pingcounter");
-    public static Pinger pinger;
+    public static KeyMapping keyMap = new KeyMapping("key.pingcounter.open_settings", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_MINUS, "key.categories.pingcounter"); //Settings keybind keymap
+    public static Pinger pinger; //Server pinger instance
     public Main()
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        modEventBus.addListener(this::registerKeys);
-        modEventBus.register(keyMap);
+        modEventBus.addListener(this::registerKeys); //Register keybind
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         pinger = new Pinger();
     }

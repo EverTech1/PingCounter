@@ -39,7 +39,7 @@ public class SettingsGui extends Screen {
         addRenderableWidget(new Button.Builder(Component.literal("Edit Position"), onPressButton(3)).pos(boxCornerX+20, boxCornerY + 90).size(font.width("Edit Position") + 20, 20).build());
         addRenderableWidget(new Button.Builder(Component.literal("Reset"), onPressButton(4)).pos(boxCornerX+290, boxCornerY + 150).size(font.width("Reset")+60, 20).build());
 
-        scaleSlider = new ForgeSlider(boxCornerX+20, boxCornerY+120, 256, 20, Component.literal("Scale: "), Component.literal(""), 0.1, 10.0, Config.scale, 0.1, 0, true);
+        scaleSlider = new ForgeSlider(boxCornerX+20, boxCornerY+120, 256, 20, Component.literal("Scale: "), Component.literal(""), 0.1, 5.0, Config.scale, 0.05, 0, true);
         addRenderableWidget(scaleSlider);
 
         editBox = new EditBox(font, 256, 20, Component.literal("Enter display text here"));
