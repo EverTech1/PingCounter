@@ -22,7 +22,7 @@ public class EditPositionGui extends Screen {
         mc = Minecraft.getInstance();
         addRenderableWidget(new Button.Builder(Component.literal("Back"), buttonOnPress(0)).pos((width/2)-(font.width("Back")/2)-15, height-30).size(font.width("Back")+30, 20).build());
         addRenderableWidget(new Button.Builder(Component.literal("Reset"), buttonOnPress(1)).pos((width/2)-(font.width("Reset")/2)-15, height-60).size(font.width("Reset")+30, 20).build());
-
+        Main.isEditing = true;
     }
 
     @Override
@@ -32,15 +32,15 @@ public class EditPositionGui extends Screen {
         pGuiGraphics.pose().pushPose();
         final int textColor = 0x10000*Config.textColorRed + 0x100*Config.textColorGreen + Config.textColorBlue;
         final int backgroundColor = 0x10000*Config.backgroundColorRed + 0x100*Config.backgroundColorGreen + Config.backgroundColorBlue + 0x1000000*Config.backgroundColorAlpha;
-        final int[] pos = {(int) (mc.getWindow().getGuiScaledWidth()*Config.posX), (int) (mc.getWindow().getGuiScaledHeight()*Config.posY)};
+        final double scale = 3*Config.scale/mc.getWindow().getGuiScale();
+        final double[] pos = {(mc.getWindow().getGuiScaledWidth()*Config.posX)/scale, (mc.getWindow().getGuiScaledHeight()*Config.posY)/scale};
         final String displayString = String.format(Config.displayText, Pinger.latency);
         final String measureString = String.format(Config.displayText, 999);
         final int stringSize = font.width(measureString);
-        final double scale = 3*Config.scale/mc.getWindow().getGuiScale();
-        pGuiGraphics.pose().translate(0, 0, -10);
-        pGuiGraphics.fill(pos[0]-(int)(5*scale), pos[1]-(int)(5*scale), pos[0]+(int)((stringSize+5)*scale), pos[1]+(int)((font.lineHeight+4)*scale), backgroundColor);
         pGuiGraphics.pose().scale((float)scale, (float)scale, 1);
-        pGuiGraphics.drawString(font, String.format(displayString, Pinger.latency), (float)(pos[0]/scale), (float)(pos[1]/scale), textColor, Config.textShadow);
+        pGuiGraphics.pose().translate(pos[0], pos[1], 0.0);
+        pGuiGraphics.fill(-5, -5, stringSize+5, font.lineHeight+4, backgroundColor);
+        pGuiGraphics.drawString(font, String.format(displayString, Pinger.latency), 0, 0, textColor, Config.textShadow);
         pGuiGraphics.pose().popPose();
         for(Renderable renderable : this.renderables){
             renderable.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
@@ -63,6 +63,7 @@ public class EditPositionGui extends Screen {
     private Button.OnPress buttonOnPress(int id){
         return pButton -> {
             if(id==0){
+                Main.isEditing = false;
                 mc.setScreen(parent);
             }else{
                 Config.posX = 0.028;
@@ -73,6 +74,7 @@ public class EditPositionGui extends Screen {
 
     @Override
     public void onClose() {
+        Main.isEditing = false;
         Config.updateConfig();
         super.onClose();
     }

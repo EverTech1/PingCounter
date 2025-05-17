@@ -17,6 +17,7 @@ public class Main
     public static final String MODID = "pingcounter";
     public static KeyMapping keyMap = new KeyMapping("key.pingcounter.open_settings", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_MINUS, "key.categories.pingcounter"); //Settings keybind keymap
     public static Pinger pinger; //Server pinger instance
+    public static boolean isEditing = false;
     public Main()
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
