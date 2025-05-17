@@ -6,7 +6,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.client.gui.widget.ForgeSlider;
+import net.neoforged.neoforge.client.gui.widget.ExtendedSlider;
 
 public class ColorSettingsGui extends Screen {
     private Minecraft minecraft;
@@ -16,14 +16,14 @@ public class ColorSettingsGui extends Screen {
     private int boxCornerX;
     private int boxCornerY;
 
-    private ForgeSlider sliderTextR;
-    private ForgeSlider sliderTextG;
-    private ForgeSlider sliderTextB;
+    private ExtendedSlider sliderTextR;
+    private ExtendedSlider sliderTextG;
+    private ExtendedSlider sliderTextB;
 
-    private ForgeSlider sliderBackgroundA;
-    private ForgeSlider sliderBackgroundR;
-    private ForgeSlider sliderBackgroundG;
-    private ForgeSlider sliderBackgroundB;
+    private ExtendedSlider sliderBackgroundA;
+    private ExtendedSlider sliderBackgroundR;
+    private ExtendedSlider sliderBackgroundG;
+    private ExtendedSlider sliderBackgroundB;
 
 
     protected ColorSettingsGui(Component pTitle, Screen parent) {
@@ -46,14 +46,14 @@ public class ColorSettingsGui extends Screen {
         }).pos(boxCornerX+20, boxCornerY+205).size(font.width("Shadow: Off"+20), 20).build());
         //Sliders
         //Background
-        sliderBackgroundA = new ForgeSlider(boxCornerX + 20, boxCornerY+20, 256, 20, Component.literal("Opacity: "), Component.literal("%"),0, 100, (double) Config.backgroundColorAlpha /2.55, 1, 0, true);
-        sliderBackgroundR = new ForgeSlider(boxCornerX + 20, boxCornerY+45, 256, 20, Component.literal("Red: "), Component.literal(""),0, 255, Config.backgroundColorRed, 1, 0, true);
-        sliderBackgroundG = new ForgeSlider(boxCornerX + 20, boxCornerY+70, 256, 20, Component.literal("Green: "), Component.literal(""),0, 255, Config.backgroundColorGreen, 1, 0, true);
-        sliderBackgroundB = new ForgeSlider(boxCornerX + 20, boxCornerY+95, 256, 20, Component.literal("Blue: "), Component.literal(""),0, 255, Config.backgroundColorBlue, 1, 0, true);
+        sliderBackgroundA = new ExtendedSlider(boxCornerX + 20, boxCornerY+20, 256, 20, Component.literal("Opacity: "), Component.literal("%"),0, 100, (double) Config.backgroundColorAlpha /2.55, 1, 0, true);
+        sliderBackgroundR = new ExtendedSlider(boxCornerX + 20, boxCornerY+45, 256, 20, Component.literal("Red: "), Component.literal(""),0, 255, Config.backgroundColorRed, 1, 0, true);
+        sliderBackgroundG = new ExtendedSlider(boxCornerX + 20, boxCornerY+70, 256, 20, Component.literal("Green: "), Component.literal(""),0, 255, Config.backgroundColorGreen, 1, 0, true);
+        sliderBackgroundB = new ExtendedSlider(boxCornerX + 20, boxCornerY+95, 256, 20, Component.literal("Blue: "), Component.literal(""),0, 255, Config.backgroundColorBlue, 1, 0, true);
         //Text
-        sliderTextR = new ForgeSlider(boxCornerX + 20, boxCornerY+130, 256, 20, Component.literal("Red: "), Component.literal(""),0, 255, Config.textColorRed, 1, 0, true);
-        sliderTextG = new ForgeSlider(boxCornerX + 20, boxCornerY+155, 256, 20, Component.literal("Green: "), Component.literal(""),0, 255, Config.textColorGreen, 1, 0, true);
-        sliderTextB = new ForgeSlider(boxCornerX + 20, boxCornerY+180, 256, 20, Component.literal("Blue: "), Component.literal(""),0, 255, Config.textColorBlue, 1, 0, true);
+        sliderTextR = new ExtendedSlider(boxCornerX + 20, boxCornerY+130, 256, 20, Component.literal("Red: "), Component.literal(""),0, 255, Config.textColorRed, 1, 0, true);
+        sliderTextG = new ExtendedSlider(boxCornerX + 20, boxCornerY+155, 256, 20, Component.literal("Green: "), Component.literal(""),0, 255, Config.textColorGreen, 1, 0, true);
+        sliderTextB = new ExtendedSlider(boxCornerX + 20, boxCornerY+180, 256, 20, Component.literal("Blue: "), Component.literal(""),0, 255, Config.textColorBlue, 1, 0, true);
 
         addRenderableWidget(sliderBackgroundA);
         addRenderableWidget(sliderBackgroundR);

@@ -13,12 +13,8 @@ public class Pinger {
     public static boolean isPinging = false;
     private static Timer timer;
     public static Connection connection;
-    Minecraft mc;
-    public Pinger(){
-        mc = Minecraft.getInstance();
-    }
     public void startPinging(int interval){
-        if(!mc.isLocalServer()&&!isPinging) {
+        if(!Minecraft.getInstance().isLocalServer()&&!isPinging) {
             timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override

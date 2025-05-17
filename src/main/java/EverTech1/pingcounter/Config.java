@@ -1,30 +1,31 @@
 package EverTech1.pingcounter;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
 
-@Mod.EventBusSubscriber(modid = Main.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.neoforge.common.ModConfigSpec;
+
+@EventBusSubscriber(modid = Main.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class Config
 {
-    private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
+    private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
 
-    private static final ForgeConfigSpec.BooleanValue enabledConfig = BUILDER.define("enabled", true);
-    private static final ForgeConfigSpec.IntValue textColorRedConfig = BUILDER.defineInRange("textColorRed", 255, 0, 255);
-    private static final ForgeConfigSpec.IntValue textColorGreenConfig = BUILDER.defineInRange("textColorGreen", 255, 0, 255);
-    private static final ForgeConfigSpec.IntValue textColorBlueConfig = BUILDER.defineInRange("textColorBlue", 255, 0, 255);
-    private static final ForgeConfigSpec.IntValue backgroundColorAlphaConfig = BUILDER.defineInRange("backgroundColorAlpha", 100, 0, 255);
-    private static final ForgeConfigSpec.IntValue backgroundColorRedConfig = BUILDER.defineInRange("backgroundColorRed", 0, 0, 255);
-    private static final ForgeConfigSpec.IntValue backgroundColorGreenConfig = BUILDER.defineInRange("backgroundColorRed", 0, 0, 255);
-    private static final ForgeConfigSpec.IntValue backgroundColorBlueConfig = BUILDER.defineInRange("backgroundColorRed", 0, 0, 255);
-    private static final ForgeConfigSpec.BooleanValue textShadowConfig = BUILDER.define("textShadow", true);
-    private static final ForgeConfigSpec.DoubleValue scaleConfig = BUILDER.defineInRange("scale", 1.0, 0.0, 10.0);
-    private static final ForgeConfigSpec.DoubleValue posXConfig = BUILDER.defineInRange("posX", 0.028, 0.0, 1.0);
-    private static final ForgeConfigSpec.DoubleValue posYConfig = BUILDER.defineInRange("posY", 0.05, 0.0, 1.0);
-    private static final ForgeConfigSpec.ConfigValue<String> displayTextConfig = BUILDER.define("displayText", "Ping: %1$dms");
+    private static final ModConfigSpec.BooleanValue enabledConfig = BUILDER.define("enabled", true);
+    private static final ModConfigSpec.IntValue textColorRedConfig = BUILDER.defineInRange("textColorRed", 255, 0, 255);
+    private static final ModConfigSpec.IntValue textColorGreenConfig = BUILDER.defineInRange("textColorGreen", 255, 0, 255);
+    private static final ModConfigSpec.IntValue textColorBlueConfig = BUILDER.defineInRange("textColorBlue", 255, 0, 255);
+    private static final ModConfigSpec.IntValue backgroundColorAlphaConfig = BUILDER.defineInRange("backgroundColorAlpha", 100, 0, 255);
+    private static final ModConfigSpec.IntValue backgroundColorRedConfig = BUILDER.defineInRange("backgroundColorRed", 0, 0, 255);
+    private static final ModConfigSpec.IntValue backgroundColorGreenConfig = BUILDER.defineInRange("backgroundColorRed", 0, 0, 255);
+    private static final ModConfigSpec.IntValue backgroundColorBlueConfig = BUILDER.defineInRange("backgroundColorRed", 0, 0, 255);
+    private static final ModConfigSpec.BooleanValue textShadowConfig = BUILDER.define("textShadow", true);
+    private static final ModConfigSpec.DoubleValue scaleConfig = BUILDER.defineInRange("scale", 1.0, 0.0, 10.0);
+    private static final ModConfigSpec.DoubleValue posXConfig = BUILDER.defineInRange("posX", 0.028, 0.0, 1.0);
+    private static final ModConfigSpec.DoubleValue posYConfig = BUILDER.defineInRange("posY", 0.05, 0.0, 1.0);
+    private static final ModConfigSpec.ConfigValue<String> displayTextConfig = BUILDER.define("displayText", "Ping: %1$dms");
 
-    static final ForgeConfigSpec SPEC = BUILDER.build();
+    static final ModConfigSpec SPEC = BUILDER.build();
 
     public static boolean enabled;
 

@@ -7,7 +7,7 @@ import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.client.gui.widget.ForgeSlider;
+import net.neoforged.neoforge.client.gui.widget.ExtendedSlider;
 
 import java.util.regex.Matcher;
 
@@ -20,7 +20,7 @@ public class SettingsGui extends Screen {
     private int boxCornerY;
     private Button toggleButton;
     private EditBox editBox;
-    private ForgeSlider scaleSlider;
+    private ExtendedSlider scaleSlider;
     protected SettingsGui(Component pTitle) {
         super(pTitle);
     }
@@ -39,7 +39,7 @@ public class SettingsGui extends Screen {
         addRenderableWidget(new Button.Builder(Component.literal("Edit Position"), onPressButton(3)).pos(boxCornerX+20, boxCornerY + 90).size(font.width("Edit Position") + 20, 20).build());
         addRenderableWidget(new Button.Builder(Component.literal("Reset"), onPressButton(4)).pos(boxCornerX+290, boxCornerY + 150).size(font.width("Reset")+60, 20).build());
 
-        scaleSlider = new ForgeSlider(boxCornerX+20, boxCornerY+120, 256, 20, Component.literal("Scale: "), Component.literal(""), 0.1, 5.0, Config.scale, 0.05, 0, true);
+        scaleSlider = new ExtendedSlider(boxCornerX+20, boxCornerY+120, 256, 20, Component.literal("Scale: "), Component.literal(""), 0.1, 5.0, Config.scale, 0.05, 0, true);
         addRenderableWidget(scaleSlider);
 
         editBox = new EditBox(font, 256, 20, Component.literal("Enter display text here"));
