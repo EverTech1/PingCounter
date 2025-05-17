@@ -83,7 +83,6 @@ public class SettingsGui extends Screen {
     @Override
     public void onClose() {
         if(editBox.getValue().isBlank()) editBox.setValue("Ping: $[ping]ms");
-        Config.displayText = editBox.getValue().replaceAll("%", "%%%%").replaceAll("(\\$\\[ping])", Matcher.quoteReplacement("%1$d"));
         Config.updateConfig();
         super.onClose();
     }
@@ -91,6 +90,7 @@ public class SettingsGui extends Screen {
     @Override
     public void tick() {
         Config.scale = scaleSlider.getValue();
+        Config.displayText = editBox.getValue().replaceAll("%", "%%%%").replaceAll("(\\$\\[ping])", Matcher.quoteReplacement("%1$d"));
         super.tick();
     }
 }
