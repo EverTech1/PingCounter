@@ -38,7 +38,7 @@ public class EditPositionGui extends Screen {
         final String measureString = String.format(Config.displayText, 999);
         final int stringSize = font.width(measureString);
         pGuiGraphics.pose().scale((float)scale, (float)scale, 1);
-        pGuiGraphics.pose().translate(pos[0], pos[1], 0.0);
+        pGuiGraphics.pose().translate(pos[0], pos[1], -1);
         pGuiGraphics.fill(-5, -5, stringSize+5, font.lineHeight+4, backgroundColor);
         pGuiGraphics.drawString(font, String.format(displayString, Pinger.latency), 0, 0, textColor, Config.textShadow);
         pGuiGraphics.pose().popPose();
