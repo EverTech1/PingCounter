@@ -1,0 +1,14 @@
+{
+	"required": true,
+	"package": "evertech1.pingcounter.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"PingMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}
