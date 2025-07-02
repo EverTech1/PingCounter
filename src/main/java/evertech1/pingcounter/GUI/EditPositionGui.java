@@ -12,10 +12,11 @@ import net.minecraft.text.Text;
 
 public class EditPositionGui extends Screen {
     private Config cfg;
-    private MinecraftClient minecraft = MinecraftClient.getInstance();
+    private final MinecraftClient minecraft = MinecraftClient.getInstance();
     private final Screen parentScreen;
     private ButtonWidget backButton;
     private ButtonWidget resetButton;
+    private boolean grabbed = false;
     public EditPositionGui(Text title, Screen parent){
         super(title);
         parentScreen = parent;
@@ -49,14 +50,28 @@ public class EditPositionGui extends Screen {
 
     @Override
     public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
-        final int[] pos = {(int) (minecraft.getWindow().getScaledWidth()*cfg.posX), (int) (minecraft.getWindow().getScaledHeight()*cfg.posY)};
-        final double scale = 3*cfg.scale/minecraft.getWindow().getScaleFactor();
-        final int stringSize = textRenderer.getWidth(String.format(cfg.displayText, 999));
-        if(pMouseX-pDragX>=pos[0]-(int)(5*scale) && pMouseX-pDragX<=pos[0]+(int)((stringSize+5)*scale) && pMouseY-pDragY>=pos[1]-(int)(5*scale) && pMouseY-pDragY<=pos[1]+(int)((textRenderer.fontHeight+4)*scale)){
+        if(grabbed){
             cfg.posX = Math.min(Math.max(cfg.posX+pDragX/width, 0), 1);
             cfg.posY = Math.min(Math.max(cfg.posY+pDragY/height, 0), 1);
         }
         return super.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        final int[] pos = {(int) (minecraft.getWindow().getScaledWidth()*cfg.posX), (int) (minecraft.getWindow().getScaledHeight()*cfg.posY)};
+        final double scale = 3*cfg.scale/minecraft.getWindow().getScaleFactor();
+        final int stringSize = textRenderer.getWidth(String.format(cfg.displayText, 999));
+        if(mouseX>=pos[0]-(int)(5*scale) && mouseX<=pos[0]+(int)((stringSize+5)*scale) && mouseY>=pos[1]-(int)(5*scale) && mouseY<=pos[1]+(int)((textRenderer.fontHeight+4)*scale)){
+            grabbed = true;
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        grabbed = false;
+        return super.mouseReleased(mouseX, mouseY, button);
     }
 
     @Override
