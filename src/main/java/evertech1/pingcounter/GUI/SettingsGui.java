@@ -25,9 +25,8 @@ public class SettingsGui extends Screen {
     private Config cfg;
     private ButtonWidget toggleButton;
     private TextFieldWidget textBox;
-    private SliderWidget scaleSlider;
     private List<Drawable> drawables;
-
+    private float scaleFactor = 1;
     public SettingsGui(Text pTitle) {
         super(pTitle);
     }
@@ -36,43 +35,48 @@ public class SettingsGui extends Screen {
     protected void init() {
         drawables = Lists.newArrayList();
         cfg = ConfigHandler.config;
-        boxCornerX = (width/2)-(boxWidth/2);
-        boxCornerY = (height/2)-(boxHeight/2);
+        scaleFactor = Math.min(1.0f, Math.min((float)width/boxWidth, (float)height/boxHeight));
+        boxCornerX = (int) ((width/2.0)-(boxWidth*scaleFactor/2.0));
+        boxCornerY = (int) ((height/2.0)-(boxHeight*scaleFactor/2.0));
         final int backStringLength = textRenderer.getWidth("Back");
-        toggleButton = new ButtonWidget.Builder(Text.literal(cfg.enabled ? "Enabled" : "Disabled"), onPressButton(1)).position(boxCornerX + 20, boxCornerY + 30).size(textRenderer.getWidth("Disabled") + 20, 20).build();
+        toggleButton = new ButtonWidget.Builder(Text.literal(cfg.enabled ? "Enabled" : "Disabled"), onPressButton(1)).position(20, 30).size(textRenderer.getWidth("Disabled") + 20, 20).build();
         drawables.add(addSelectableChild(toggleButton));
-        drawables.add(addSelectableChild(new ButtonWidget.Builder(Text.literal("Back"), onPressButton(0)).position((width / 2) - (backStringLength / 2) - 30, boxCornerY + boxHeight - 30).size(backStringLength + 60, 20).build()));
-        drawables.add(addSelectableChild(new ButtonWidget.Builder(Text.literal("Color Settings"), onPressButton(2)).position(boxCornerX + 20, boxCornerY + 60).size(textRenderer.getWidth("Color Settings") + 20, 20).build()));
-        drawables.add(addSelectableChild(new ButtonWidget.Builder(Text.literal("Edit Position"), onPressButton(3)).position(boxCornerX + 20, boxCornerY + 90).size(textRenderer.getWidth("Edit Position") + 20, 20).build()));
-        drawables.add(addSelectableChild(new ButtonWidget.Builder(Text.literal("Reset"), onPressButton(4)).position(boxCornerX + 290, boxCornerY + 150).size(textRenderer.getWidth("Reset") + 60, 20).build()));
+        drawables.add(addSelectableChild(new ButtonWidget.Builder(Text.literal("Back"), onPressButton(0)).position((boxWidth / 2) - (backStringLength / 2) - 30, boxHeight - 30).size(backStringLength + 60, 20).build()));
+        drawables.add(addSelectableChild(new ButtonWidget.Builder(Text.literal("Color Settings"), onPressButton(2)).position(20, 60).size(textRenderer.getWidth("Color Settings") + 20, 20).build()));
+        drawables.add(addSelectableChild(new ButtonWidget.Builder(Text.literal("Edit Position"), onPressButton(3)).position(20, 90).size(textRenderer.getWidth("Edit Position") + 20, 20).build()));
+        drawables.add(addSelectableChild(new ButtonWidget.Builder(Text.literal("Reset"), onPressButton(4)).position(290, 150).size(textRenderer.getWidth("Reset") + 60, 20).build()));
         DecimalFormat scaleFormat = new DecimalFormat("Scale: 0.00");
-        scaleSlider = new SliderWidget(boxCornerX + 20, boxCornerY + 120, 256, 20, Text.literal(scaleFormat.format(Math.round(cfg.scale*500)/500.0)), cfg.scale/5.0) {
+        SliderWidget scaleSlider = new SliderWidget(20, 120, 256, 20, Text.literal(scaleFormat.format(Math.round(cfg.scale * 500) / 500.0)), cfg.scale / 5.0) {
 
             @Override
             protected void updateMessage() {
-                this.setMessage(Text.literal(scaleFormat.format(Math.round(cfg.scale*500)/500.0)));
+                this.setMessage(Text.literal(scaleFormat.format(Math.round(cfg.scale * 500) / 500.0)));
             }
 
             @Override
             protected void applyValue() {
-                cfg.scale = 0.1+0.05*Math.floor(98*value);
+                cfg.scale = 0.1 + 0.05 * Math.floor(98 * value);
             }
         };
         drawables.add(addSelectableChild(scaleSlider));
         textBox = new TextFieldWidget(textRenderer, 256, 20, Text.literal("Enter display text here"));
         textBox.setText(cfg.displayText.replaceAll("(%%%%)", "%").replaceAll("(%1\\$d)", Matcher.quoteReplacement("$[ping]")));
-        textBox.setPosition(boxCornerX+20, boxCornerY+150);
+        textBox.setPosition(20, 150);
         drawables.add(addSelectableChild(textBox));
         super.init();
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
-        context.fill(boxCornerX, boxCornerY, boxCornerX + boxWidth, boxCornerY + boxHeight, 0xA0000000);
+        context.getMatrices().push();
+        context.getMatrices().translate(boxCornerX, boxCornerY, 0);
+        context.getMatrices().scale(scaleFactor, scaleFactor, 0);
+        context.fill(0, 0, boxWidth, boxHeight, 0xA0000000);
         for(Drawable drawable : this.drawables){
-            drawable.render(context, mouseX, mouseY, deltaTicks);
+            drawable.render(context, (int)((mouseX-boxCornerX)/scaleFactor), (int)((mouseY-boxCornerY)/scaleFactor), deltaTicks);
         }
-        context.drawText(textRenderer, "Ping Counter settings", boxCornerX + 20, boxCornerY + 10, 0xFFFFFFFF, false);
+        context.drawText(textRenderer, "Ping Counter settings", 20, 10, 0xFFFFFFFF, false);
+        context.getMatrices().pop();
     }
 
     private ButtonWidget.PressAction onPressButton(int id){
@@ -109,5 +113,20 @@ public class SettingsGui extends Screen {
     public void tick() {
         cfg.displayText = textBox.getText().replaceAll("%", "%%").replaceAll("(\\$\\[ping])", Matcher.quoteReplacement("%1$d"));
         super.tick();
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        return super.mouseClicked((int)((mouseX-boxCornerX)/scaleFactor), (int)((mouseY-boxCornerY)/scaleFactor), button);
+    }
+
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+        return super.mouseDragged((int)((mouseX-boxCornerX)/scaleFactor), (int)((mouseY-boxCornerY)/scaleFactor), button, deltaX, deltaY);
+    }
+
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        return super.mouseReleased((int)((mouseX-boxCornerX)/scaleFactor), (int)((mouseY-boxCornerY)/scaleFactor), button);
     }
 }

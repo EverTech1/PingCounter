@@ -14,13 +14,14 @@ import net.minecraft.text.Text;
 import java.util.List;
 
 public class ColorSettingsGui extends Screen {
-    private Config cfg = ConfigHandler.config;
+    private final Config cfg = ConfigHandler.config;
     private MinecraftClient minecraft;
     private final int boxWidth = 327;
     private final int boxHeight = 270;
     private final Screen parentScreen;
     private int boxCornerX;
     private int boxCornerY;
+    private float scaleFactor = 1;
     private List<Drawable> drawables;
     protected ColorSettingsGui(Text title, Screen parent) {
         super(title);
@@ -32,18 +33,19 @@ public class ColorSettingsGui extends Screen {
         super.init();
         drawables = Lists.newArrayList();
         minecraft = MinecraftClient.getInstance();
-        boxCornerX = (width/2)-(boxWidth/2);
-        boxCornerY = (height/2)-(boxHeight/2);
+        scaleFactor = Math.min(1.0f, Math.min((float)width/boxWidth, (float)height/boxHeight));
+        boxCornerX = (int) ((width/2.0)-(boxWidth*scaleFactor/2.0));
+        boxCornerY = (int) ((height/2.0)-(boxHeight*scaleFactor/2.0));
         int backLength = textRenderer.getWidth("Back");
         //Buttons
-        drawables.add(addSelectableChild(new ButtonWidget.Builder(Text.literal("Back"), (button -> minecraft.setScreen(parentScreen))).position(boxCornerX+boxWidth/2-backLength/2-30, boxCornerY+boxHeight-30).size(backLength+60, 20).build()));
+        drawables.add(addSelectableChild(new ButtonWidget.Builder(Text.literal("Back"), (button -> minecraft.setScreen(parentScreen))).position(boxWidth/2-backLength/2-30, boxHeight-30).size(backLength+60, 20).build()));
         drawables.add(addSelectableChild(new ButtonWidget.Builder(Text.literal(cfg.textShadow ? "Shadow: On " : "Shadow: Off"), button -> {
             cfg.textShadow = !cfg.textShadow;
             button.setMessage(Text.literal(cfg.textShadow ? "Shadow: On " : "Shadow: Off"));
-        }).position(boxCornerX+20, boxCornerY+205).size(textRenderer.getWidth("Shadow: Off"+20), 20).build()));
+        }).position(20, 205).size(textRenderer.getWidth("Shadow: Off"+20), 20).build()));
         //Sliders
         //Background
-        SliderWidget sliderBackgroundA = new SliderWidget(boxCornerX + 20, boxCornerY + 20, 256, 20, Text.literal(String.format("Opacity: %d%%", Math.round(cfg.backgroundColorAlpha / 2.55))), cfg.backgroundColorAlpha / 255.0) {
+        SliderWidget sliderBackgroundA = new SliderWidget(20, 20, 256, 20, Text.literal(String.format("Opacity: %d%%", Math.round(cfg.backgroundColorAlpha / 2.55))), cfg.backgroundColorAlpha / 255.0) {
             @Override
             protected void updateMessage() {
                 setMessage(Text.literal(String.format("Opacity: %d%%", Math.round(cfg.backgroundColorAlpha / 2.55))));
@@ -54,7 +56,7 @@ public class ColorSettingsGui extends Screen {
                 cfg.backgroundColorAlpha = (int) Math.round(value * 255);
             }
         };
-        SliderWidget sliderBackgroundR = new SliderWidget(boxCornerX + 20, boxCornerY + 45, 256, 20, Text.literal(String.format("Red: %d", cfg.backgroundColorRed)), cfg.backgroundColorRed / 255.0) {
+        SliderWidget sliderBackgroundR = new SliderWidget(20, 45, 256, 20, Text.literal(String.format("Red: %d", cfg.backgroundColorRed)), cfg.backgroundColorRed / 255.0) {
 
             @Override
             protected void updateMessage() {
@@ -66,7 +68,7 @@ public class ColorSettingsGui extends Screen {
                 cfg.backgroundColorRed = (int) Math.round(value * 255);
             }
         };
-        SliderWidget sliderBackgroundG = new SliderWidget(boxCornerX + 20, boxCornerY + 70, 256, 20, Text.literal(String.format("Green: %d", cfg.backgroundColorGreen)), cfg.backgroundColorGreen / 255.0) {
+        SliderWidget sliderBackgroundG = new SliderWidget(20, 70, 256, 20, Text.literal(String.format("Green: %d", cfg.backgroundColorGreen)), cfg.backgroundColorGreen / 255.0) {
 
             @Override
             protected void updateMessage() {
@@ -78,7 +80,7 @@ public class ColorSettingsGui extends Screen {
                 cfg.backgroundColorGreen = (int) Math.round(value * 255);
             }
         };
-        SliderWidget sliderBackgroundB = new SliderWidget(boxCornerX + 20, boxCornerY + 95, 256, 20, Text.literal(String.format("Blue: %d", cfg.backgroundColorBlue)), cfg.backgroundColorBlue / 255.0) {
+        SliderWidget sliderBackgroundB = new SliderWidget(20, 95, 256, 20, Text.literal(String.format("Blue: %d", cfg.backgroundColorBlue)), cfg.backgroundColorBlue / 255.0) {
 
             @Override
             protected void updateMessage() {
@@ -91,7 +93,7 @@ public class ColorSettingsGui extends Screen {
             }
         };
         //Text
-        SliderWidget sliderTextR = new SliderWidget(boxCornerX + 20, boxCornerY + 130, 256, 20, Text.literal(String.format("Red: %d", cfg.textColorRed)), cfg.textColorRed / 255.0) {
+        SliderWidget sliderTextR = new SliderWidget(20, 130, 256, 20, Text.literal(String.format("Red: %d", cfg.textColorRed)), cfg.textColorRed / 255.0) {
 
             @Override
             protected void updateMessage() {
@@ -103,7 +105,7 @@ public class ColorSettingsGui extends Screen {
                 cfg.textColorRed = (int) Math.round(value * 255);
             }
         };
-        SliderWidget sliderTextG = new SliderWidget(boxCornerX + 20, boxCornerY + 155, 256, 20, Text.literal(String.format("Red: %d", cfg.textColorGreen)), cfg.textColorGreen / 255.0) {
+        SliderWidget sliderTextG = new SliderWidget(20, 155, 256, 20, Text.literal(String.format("Red: %d", cfg.textColorGreen)), cfg.textColorGreen / 255.0) {
 
             @Override
             protected void updateMessage() {
@@ -115,7 +117,7 @@ public class ColorSettingsGui extends Screen {
                 cfg.textColorGreen = (int) Math.round(value * 255);
             }
         };
-        SliderWidget sliderTextB = new SliderWidget(boxCornerX + 20, boxCornerY + 180, 256, 20, Text.literal(String.format("Red: %d", cfg.textColorBlue)), cfg.textColorBlue / 255.0) {
+        SliderWidget sliderTextB = new SliderWidget(20, 180, 256, 20, Text.literal(String.format("Red: %d", cfg.textColorBlue)), cfg.textColorBlue / 255.0) {
 
             @Override
             protected void updateMessage() {
@@ -141,24 +143,41 @@ public class ColorSettingsGui extends Screen {
     public void render(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
         final int textColor = 0x10000 * cfg.textColorRed + 0x100 * cfg.textColorGreen + cfg.textColorBlue;
         final int backgroundColor = 0x10000 * cfg.backgroundColorRed + 0x100 * cfg.backgroundColorGreen + cfg.backgroundColorBlue;
-
-        context.fill(boxCornerX, boxCornerY, boxCornerX+boxWidth, boxCornerY+boxHeight, 0xA0000000);
-        context.drawText(textRenderer, "Background:", boxCornerX+20, boxCornerY+10, 0xFFFFFFFF, false);
-        context.drawText(textRenderer, "Text:", boxCornerX+20, boxCornerY+120, 0xFFFFFFFF, false);
+        context.getMatrices().push();
+        context.getMatrices().translate(boxCornerX, boxCornerY, 0);
+        context.getMatrices().scale(scaleFactor, scaleFactor, 1);
+        context.fill(0, 0, boxWidth, boxHeight, 0xA0000000);
+        context.drawText(textRenderer, "Background:", 20, 10, 0xFFFFFFFF, false);
+        context.drawText(textRenderer, "Text:", 20, 120, 0xFFFFFFFF, false);
         //Draw outline
-        context.fill(boxCornerX+285, boxCornerY+44, boxCornerX+307, boxCornerY+116, 0xFFFFFFFF);
-        context.fill(boxCornerX+285, boxCornerY+129, boxCornerX+307, boxCornerY+201, 0xFFFFFFFF);
+        context.fill(285, 44, 307, 116, 0xFFFFFFFF);
+        context.fill(285, 129, 307, 201, 0xFFFFFFFF);
         //Draw samples
-        context.fill(boxCornerX+286, boxCornerY+45, boxCornerX+306, boxCornerY+115, backgroundColor|0xFF000000);
-        context.fill(boxCornerX+286, boxCornerY+130, boxCornerX+306, boxCornerY+200, textColor|0xFF000000);
+        context.fill(286, 45, 306, 115, backgroundColor|0xFF000000);
+        context.fill(286, 130, 306, 200, textColor|0xFF000000);
         for(Drawable drawable : drawables){
-            drawable.render(context, mouseX, mouseY, deltaTicks);
+            drawable.render(context, (int)((mouseX-boxCornerX)/scaleFactor), (int)((mouseY-boxCornerY)/scaleFactor), deltaTicks);
         }
+        context.getMatrices().pop();
     }
 
     @Override
     public void close() {
         ConfigHandler.updateValues();
         super.close();
+    }
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        return super.mouseClicked((int)((mouseX-boxCornerX)/scaleFactor), (int)((mouseY-boxCornerY)/scaleFactor), button);
+    }
+
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+        return super.mouseDragged((int)((mouseX-boxCornerX)/scaleFactor), (int)((mouseY-boxCornerY)/scaleFactor), button, deltaX, deltaY);
+    }
+
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        return super.mouseReleased((int)((mouseX-boxCornerX)/scaleFactor), (int)((mouseY-boxCornerY)/scaleFactor), button);
     }
 }
