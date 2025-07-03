@@ -13,7 +13,7 @@ public class ConfigHandler {
         try {
             if(f.createNewFile()) updateValues();
         } catch (IOException e) {
-            e.printStackTrace();
+            PingCounter.LOGGER.error("Failed to create config file", e);
         }
     }
     static{
@@ -30,7 +30,7 @@ public class ConfigHandler {
             }
         }
         catch(IOException e){
-            e.printStackTrace();
+            PingCounter.LOGGER.error("Failed to read config file", e);
         }
     }
 
@@ -40,7 +40,7 @@ public class ConfigHandler {
             gson.toJson(config, file);
         }
         catch(IOException e){
-            e.printStackTrace();
+            PingCounter.LOGGER.error("Failed to update config file", e);
         }
     }
 }
