@@ -7,7 +7,7 @@ import net.minecraft.client.render.RenderTickCounter;
 public class RenderPing {
     private static final Config cfg = ConfigHandler.config;
     public static void render(DrawContext context, RenderTickCounter tickCounter){
-        if(cfg.enabled && !PingCounter.isEditing) {
+        if(cfg.enabled && !PingCounter.isEditing && !MinecraftClient.getInstance().isConnectedToLocalServer() && !MinecraftClient.getInstance().getDebugHud().shouldShowDebugHud()) {
             renderOverlay(context);
         }
     }
