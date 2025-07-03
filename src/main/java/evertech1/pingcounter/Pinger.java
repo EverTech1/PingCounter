@@ -12,7 +12,7 @@ public class Pinger {
     public static boolean isConnected = false;
     public static long ping = 0;
     public static PacketSender sender;
-    private static TimerTask timerTask = new TimerTask() {
+    private static final TimerTask timerTask = new TimerTask() {
         @Override
         public void run() {
             if(sender != null && isConnected){
@@ -24,5 +24,9 @@ public class Pinger {
     public static void startPinger(int interval){
         if(!isPinging) timer.schedule(timerTask, 0, interval);
         isPinging = true;
+    }
+    public static void stopPinger(){
+        if(isPinging) timer.cancel();
+        isPinging = false;
     }
 }
