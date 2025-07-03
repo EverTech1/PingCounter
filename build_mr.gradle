@@ -4,7 +4,7 @@ plugins {
 }
 
 def targetJavaFile = "src/main/java/evertech1/pingcounter/PingCounter.java"
-def downloadURL = "https://www.curseforge.com/minecraft/mc-mods/pingcounter"
+def downloadURL = "https://modrinth.com/mod/ping-counter"
 
 version = project.mod_version
 group = project.maven_group
@@ -58,7 +58,7 @@ tasks.register("deleteLibsFile"){
 
 tasks.register("copyFiles", Copy) {
 	from "$projectDir/build/libs/$archivesBaseName-$version" + ".jar"
-	into "$projectDir/build/jars/curseforge/"
+	into "$projectDir/build/jars/modrinth/"
 	finalizedBy deleteLibsFile
 }
 
