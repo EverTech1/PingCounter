@@ -11,6 +11,7 @@ import net.minecraft.network.chat.Component;
 public class EditPositionGui extends Screen {
     private Minecraft mc;
     private final Screen parent;
+    private boolean grabbed = false;
     protected EditPositionGui(Component pTitle, Screen parent) {
         super(pTitle);
         this.parent = parent;
@@ -26,36 +27,20 @@ public class EditPositionGui extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
-        pGuiGraphics.fill(0, 0, width, height, -11, 0xA0000000);
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        guiGraphics.fill(0, 0, width, height, -11, 0xA0000000);
         Font font = mc.font;
-        pGuiGraphics.pose().pushPose();
-        final int textColor = 0x10000*Config.textColorRed + 0x100*Config.textColorGreen + Config.textColorBlue;
-        final int backgroundColor = 0x10000*Config.backgroundColorRed + 0x100*Config.backgroundColorGreen + Config.backgroundColorBlue + 0x1000000*Config.backgroundColorAlpha;
-        final double scale = 3*Config.scale/mc.getWindow().getGuiScale();
-        final double[] pos = {(mc.getWindow().getGuiScaledWidth()*Config.posX)/scale, (mc.getWindow().getGuiScaledHeight()*Config.posY)/scale};
-        final String displayString = String.format(Config.displayText, Pinger.latency);
-        final String measureString = String.format(Config.displayText, 999);
-        final int stringSize = font.width(measureString);
-        pGuiGraphics.pose().scale((float)scale, (float)scale, 1);
-        pGuiGraphics.pose().translate(pos[0], pos[1], -1);
-        pGuiGraphics.fill(-5, -5, stringSize+5, font.lineHeight+4, backgroundColor);
-        pGuiGraphics.drawString(font, String.format(displayString, Pinger.latency), 0, 0, textColor, Config.textShadow);
-        pGuiGraphics.pose().popPose();
+        PingLayer.renderInternal(guiGraphics);
         for(Renderable renderable : this.renderables){
-            renderable.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
+            renderable.render(guiGraphics, mouseX, mouseY, partialTick);
         }
     }
 
     @Override
     public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
-        final int[] pos = {(int) (mc.getWindow().getGuiScaledWidth()*Config.posX), (int) (mc.getWindow().getGuiScaledHeight()*Config.posY)};
-        final double scale = 3*Config.scale/mc.getWindow().getGuiScale();
-        final int stringSize = font.width(String.format(Config.displayText, 999));
-        if(pMouseX-pDragX>=pos[0]-(int)(5*scale) && pMouseX-pDragX<=pos[0]+(int)((stringSize+5)*scale) && pMouseY-pDragY>=pos[1]-(int)(5*scale) && pMouseY-pDragY<=pos[1]+(int)((font.lineHeight+4)*scale)){
+        if(grabbed){
             Config.posX = Math.min(Math.max(Config.posX+pDragX/width, 0), 1);
             Config.posY = Math.min(Math.max(Config.posY+pDragY/height, 0), 1);
-
         }
         return super.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
     }
@@ -70,6 +55,23 @@ public class EditPositionGui extends Screen {
                 Config.posY = 0.05;
             }
         };
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        final int[] pos = {(int) (minecraft.getWindow().getGuiScaledWidth()*Config.posX), (int) (minecraft.getWindow().getGuiScaledHeight()*Config.posY)};
+        final double scale = 3*Config.scale/minecraft.getWindow().getGuiScale();
+        final int stringSize = font.width(String.format(Config.displayText, 999));
+        if(mouseX>=pos[0]-(int)(5*scale) && mouseX<=pos[0]+(int)((stringSize+5)*scale) && mouseY>=pos[1]-(int)(5*scale) && mouseY<=pos[1]+(int)((font.lineHeight+4)*scale)){
+            grabbed = true;
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        grabbed = false;
+        return super.mouseReleased(mouseX, mouseY, button);
     }
 
     @Override
