@@ -11,11 +11,11 @@ public class PingLayer implements LayeredDraw.Layer {
     public void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
         guiGraphics.pose().pushPose();
         if(Config.enabled && !Main.isEditing &&!Minecraft.getInstance().isLocalServer()&&!Minecraft.getInstance().gui.getDebugOverlay().showDebugScreen()){
-            renderInternal(guiGraphics, deltaTracker);
+            renderInternal(guiGraphics);
         }
         guiGraphics.pose().popPose();
     }
-    private void renderInternal(GuiGraphics guiGraphics, DeltaTracker deltaTracker){
+    public static void renderInternal(GuiGraphics guiGraphics){
         Minecraft mc = Minecraft.getInstance();
         Font font = mc.font;
         final int textColor = 0x10000*Config.textColorRed + 0x100*Config.textColorGreen + Config.textColorBlue;
