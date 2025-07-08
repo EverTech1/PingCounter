@@ -77,5 +77,6 @@ public class Config
         posXConfig.set(posX);
         posYConfig.set(posY);
         displayTextConfig.set(displayText);
+        SPEC.save();
     }
 }
