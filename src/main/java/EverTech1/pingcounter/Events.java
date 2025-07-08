@@ -2,17 +2,17 @@ package EverTech1.pingcounter;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.VersionChecker;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
-import net.neoforged.neoforge.client.event.ClientTickEvent;
-import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
+import net.neoforged.neoforge.client.event.*;
 
 @EventBusSubscriber(modid = Main.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class Events {
@@ -25,6 +25,7 @@ public class Events {
     }
     @SubscribeEvent
     public static void onJoinServer(ClientPlayerNetworkEvent.LoggingIn event){
+        Pinger.connection = event.getConnection();
         Main.pinger.startPinging(2000);
         if(!Main.notified){
             ModList.get().getModContainerById(Main.MODID).ifPresent(modContainer -> {
@@ -44,6 +45,7 @@ public class Events {
 
     @SubscribeEvent
     public static void onLeaveServer(ClientPlayerNetworkEvent.LoggingOut event){
+        Pinger.connection = null;
         Main.pinger.stopPinging();
     }
 
