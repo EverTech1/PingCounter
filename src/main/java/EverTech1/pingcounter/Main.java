@@ -2,10 +2,12 @@ package EverTech1.pingcounter;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import org.lwjgl.glfw.GLFW;
 
@@ -20,10 +22,14 @@ public class Main
     public Main(IEventBus modEventBus, ModContainer modContainer)
     {
         modEventBus.addListener(this::registerKeys); //Register keybind
+        modEventBus.addListener(this::onRegisterLayers); //Register ping layer
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         pinger = new Pinger();
     }
 
+    public void onRegisterLayers(RegisterGuiLayersEvent e){
+        e.registerAboveAll(ResourceLocation.fromNamespaceAndPath("pingcounter", "ping_layer"), new PingLayer());
+    }
     private void registerKeys(final RegisterKeyMappingsEvent event){
         event.register(keyMap);
     }
