@@ -46,7 +46,7 @@ public class Config
 
 
     @SubscribeEvent
-    static void onLoad(final ModConfigEvent event) {
+    public static void onLoad(final ModConfigEvent event) {
         enabled = enabledConfig.get();
         textColorRed = textColorRedConfig.get();
         textColorGreen = textColorGreenConfig.get();
@@ -64,7 +64,7 @@ public class Config
         displayText = displayTextConfig.get();
     }
 
-    static void updateConfig(){
+    public static void updateConfig(){
         enabledConfig.set(enabled);
         textColorRedConfig.set(textColorRed);
         textColorGreenConfig.set(textColorGreen);

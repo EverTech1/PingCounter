@@ -1,5 +1,6 @@
-package EverTech1.pingcounter;
+package EverTech1.pingcounter.GUI;
 
+import EverTech1.pingcounter.Config;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -27,7 +28,7 @@ public class ColorSettingsGui extends Screen {
     private ExtendedSlider sliderBackgroundB;
 
 
-    protected ColorSettingsGui(Component pTitle, Screen parent) {
+    public ColorSettingsGui(Component pTitle, Screen parent) {
         super(pTitle);
         parentScreen = parent;
     }

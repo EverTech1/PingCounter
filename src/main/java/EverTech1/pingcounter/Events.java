@@ -1,12 +1,11 @@
 package EverTech1.pingcounter;
 
+import EverTech1.pingcounter.GUI.SettingsGui;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;

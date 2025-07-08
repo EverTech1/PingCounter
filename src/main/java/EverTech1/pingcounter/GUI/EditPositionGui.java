@@ -1,5 +1,8 @@
-package EverTech1.pingcounter;
+package EverTech1.pingcounter.GUI;
 
+import EverTech1.pingcounter.Config;
+import EverTech1.pingcounter.Main;
+import EverTech1.pingcounter.PingLayer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -12,7 +15,7 @@ public class EditPositionGui extends Screen {
     private Minecraft mc;
     private final Screen parent;
     private boolean grabbed = false;
-    protected EditPositionGui(Component pTitle, Screen parent) {
+    public EditPositionGui(Component pTitle, Screen parent) {
         super(pTitle);
         this.parent = parent;
     }
