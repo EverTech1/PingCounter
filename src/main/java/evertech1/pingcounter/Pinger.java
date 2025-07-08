@@ -22,7 +22,7 @@ public class Pinger {
     };
     private static final Timer timer = new Timer("pingTimer");
     public static void startPinger(int interval){
-        if(!isPinging) timer.schedule(timerTask, 0, interval);
+        if(!isPinging) timer.schedule(timerTask, 3000, interval);
         isPinging = true;
     }
     public static void stopPinger(){
