@@ -14,21 +14,21 @@ public class Pinger {
     private static Timer timer;
     public static Connection connection;
     public void startPinging(int interval){
-        if(!Minecraft.getInstance().isLocalServer()&&!isPinging) {
+        if(!Minecraft.getInstance().isLocalServer()&&!isPinging&&connection!=null) {
             timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    connection.send(new ServerboundPingRequestPacket(Util.getMillis()));
+                    if(isPinging) connection.send(new ServerboundPingRequestPacket(Util.getMillis()));
                 }
-            }, 0, interval);
+            }, 3000, interval);
             isPinging = true;
         }
     }
     public void stopPinging(){
         if(isPinging){
-            timer.cancel();
             isPinging = false;
+            timer.cancel();
         }
     }
 }

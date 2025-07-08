@@ -1,11 +1,10 @@
 package EverTech1.pingcounter.Mixins;
 
+import EverTech1.pingcounter.Main;
 import EverTech1.pingcounter.Pinger;
 import net.minecraft.Util;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.client.multiplayer.CommonListenerCookie;
-import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundStartConfigurationPacket;
 import net.minecraft.network.protocol.ping.ClientboundPongResponsePacket;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,10 +20,9 @@ public abstract class PingMixin{
 
     }
 
-    @Inject(method="<init>", at=@At("TAIL"))
-    public void atStart(Minecraft pMinecraft, Connection pConnection, CommonListenerCookie pCommonListenerCookie, CallbackInfo ci){
-        Pinger.connection = pConnection;
+    @Inject(method="handleConfigurationStart", at=@At("HEAD"))
+    public void configurationStart(ClientboundStartConfigurationPacket packet, CallbackInfo ci){
+        Main.pinger.stopPinging();
     }
-
 }
 
