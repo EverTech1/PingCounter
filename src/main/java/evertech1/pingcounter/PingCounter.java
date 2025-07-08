@@ -29,7 +29,7 @@ import java.net.URI;
 public class PingCounter implements ModInitializer {
 	public static String MOD_VERSION = "1.0.1";
 	public static final String MOD_ID = "pingcounter";
-	private static final Identifier EXAMPLE_LAYER = Identifier.of(PingCounter.MOD_ID, "ping-display-layer");
+	private static final Identifier PING_LAYER = Identifier.of(PingCounter.MOD_ID, "ping_layer");
 	private static KeyBinding keybind;
 	private static boolean shouldOpenGUI = false;
 	public static boolean isEditing = false;
@@ -47,13 +47,12 @@ public class PingCounter implements ModInitializer {
 				"key.categories.pingcounter"
 		));
 		ConfigHandler.getValues();
-		Pinger.startPinger(1000);
-		HudLayerRegistrationCallback.EVENT.register(layeredDrawer->layeredDrawer.attachLayerBefore(IdentifiedLayer.CHAT, EXAMPLE_LAYER, RenderPing::render));
-
+		HudLayerRegistrationCallback.EVENT.register(layeredDrawer->layeredDrawer.attachLayerBefore(IdentifiedLayer.CHAT, PING_LAYER, RenderPing::render));
 		ClientPlayConnectionEvents.JOIN.register((handler, sender, client)->{
 			if(!client.isIntegratedServerRunning()){
 				Pinger.sender = sender;
 				Pinger.isConnected = true;
+				Pinger.startPinger(2000);
 				if(VersionChecker.result == VersionChecker.Results.OLD && !notified){
 					notified = true;
 					if(client.player != null){
@@ -62,12 +61,11 @@ public class PingCounter implements ModInitializer {
 				}
 			}
 		});
-
 		ClientPlayConnectionEvents.DISCONNECT.register((handler, client)->{
+			Pinger.stopPinger();
 			Pinger.sender = null;
 			Pinger.isConnected = false;
 		});
-
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (keybind.wasPressed() || shouldOpenGUI) {
 				MinecraftClient.getInstance().execute(()->{
@@ -82,6 +80,5 @@ public class PingCounter implements ModInitializer {
 				return 1;
 			}))
 		);
-
 	}
 }
