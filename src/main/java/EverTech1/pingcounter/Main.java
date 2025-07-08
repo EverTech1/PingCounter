@@ -28,7 +28,7 @@ public class Main
     }
 
     public void onRegisterLayers(RegisterGuiLayersEvent e){
-        e.registerAboveAll(ResourceLocation.fromNamespaceAndPath("pingcounter", "ping_layer"), new PingLayer());
+        e.registerBelow(ResourceLocation.withDefaultNamespace("chat"), ResourceLocation.fromNamespaceAndPath(MODID, "ping_layer"), new PingLayer());
     }
     private void registerKeys(final RegisterKeyMappingsEvent event){
         event.register(keyMap);
