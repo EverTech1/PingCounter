@@ -37,12 +37,12 @@ public class EditPositionGui extends Screen {
     }
 
     @Override
-    public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
+    public boolean mouseDragged(double mouseX, double mouseY, int pButton, double pDragX, double pDragY) {
         if(grabbed){
             Config.posX = Math.min(Math.max(Config.posX+pDragX/width, 0), 1);
             Config.posY = Math.min(Math.max(Config.posY+pDragY/height, 0), 1);
         }
-        return super.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
+        return super.mouseDragged(mouseX, mouseY, pButton, pDragX, pDragY);
     }
 
     private Button.OnPress buttonOnPress(int id){
