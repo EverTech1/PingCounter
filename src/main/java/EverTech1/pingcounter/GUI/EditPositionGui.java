@@ -13,6 +13,7 @@ import net.minecraft.network.chat.Component;
 public class EditPositionGui extends Screen {
     private Minecraft mc;
     private final Screen parent;
+    private boolean grabbed = false;
     protected EditPositionGui(Component pTitle, Screen parent) {
         super(pTitle);
         this.parent = parent;
@@ -38,13 +39,9 @@ public class EditPositionGui extends Screen {
 
     @Override
     public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
-        final int[] pos = {(int) (mc.getWindow().getGuiScaledWidth()* Config.posX), (int) (mc.getWindow().getGuiScaledHeight()*Config.posY)};
-        final double scale = 3*Config.scale/mc.getWindow().getGuiScale();
-        final int stringSize = font.width(String.format(Config.displayText, 999));
-        if(pMouseX-pDragX>=pos[0]-(int)(5*scale) && pMouseX-pDragX<=pos[0]+(int)((stringSize+5)*scale) && pMouseY-pDragY>=pos[1]-(int)(5*scale) && pMouseY-pDragY<=pos[1]+(int)((font.lineHeight+4)*scale)){
+        if(grabbed){
             Config.posX = Math.min(Math.max(Config.posX+pDragX/width, 0), 1);
             Config.posY = Math.min(Math.max(Config.posY+pDragY/height, 0), 1);
-
         }
         return super.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
     }
@@ -66,5 +63,22 @@ public class EditPositionGui extends Screen {
         Main.isEditing = false;
         Config.updateConfig();
         super.onClose();
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        final int[] pos = {(int) (minecraft.getWindow().getGuiScaledWidth()*Config.posX), (int) (minecraft.getWindow().getGuiScaledHeight()*Config.posY)};
+        final double scale = 3*Config.scale/minecraft.getWindow().getGuiScale();
+        final int stringSize = font.width(String.format(Config.displayText, 999));
+        if(mouseX>=pos[0]-(int)(5*scale) && mouseX<=pos[0]+(int)((stringSize+5)*scale) && mouseY>=pos[1]-(int)(5*scale) && mouseY<=pos[1]+(int)((font.lineHeight+4)*scale)){
+            grabbed = true;
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        grabbed = false;
+        return super.mouseReleased(mouseX, mouseY, button);
     }
 }
