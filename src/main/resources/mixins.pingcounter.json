@@ -3,6 +3,7 @@
   "package": "EverTech1.pingcounter.Mixins",
   "compatibilityLevel": "JAVA_21",
   "client": [
+    "DrawTextMixin",
     "PingMixin"
   ],
   "injectors": {
