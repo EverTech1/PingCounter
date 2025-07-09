@@ -63,7 +63,7 @@ public class Config
         displayText = displayTextConfig.get();
     }
 
-    static void updateConfig(){
+    public static void updateConfig(){
         enabledConfig.set(enabled);
         textColorRedConfig.set(textColorRed);
         textColorGreenConfig.set(textColorGreen);

@@ -1,7 +1,9 @@
-package EverTech1.pingcounter;
+package EverTech1.pingcounter.GUI;
 
+import EverTech1.pingcounter.Config;
+import EverTech1.pingcounter.Events;
+import EverTech1.pingcounter.Main;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Renderable;
@@ -28,20 +30,7 @@ public class EditPositionGui extends Screen {
     @Override
     public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
         pGuiGraphics.fill(0, 0, width, height, -11, 0xA0000000);
-        Font font = mc.font;
-        pGuiGraphics.pose().pushPose();
-        final int textColor = 0x10000*Config.textColorRed + 0x100*Config.textColorGreen + Config.textColorBlue;
-        final int backgroundColor = 0x10000*Config.backgroundColorRed + 0x100*Config.backgroundColorGreen + Config.backgroundColorBlue + 0x1000000*Config.backgroundColorAlpha;
-        final double scale = 3*Config.scale/mc.getWindow().getGuiScale();
-        final double[] pos = {(mc.getWindow().getGuiScaledWidth()*Config.posX)/scale, (mc.getWindow().getGuiScaledHeight()*Config.posY)/scale};
-        final String displayString = String.format(Config.displayText, Pinger.latency);
-        final String measureString = String.format(Config.displayText, 999);
-        final int stringSize = font.width(measureString);
-        pGuiGraphics.pose().scale((float)scale, (float)scale, 1);
-        pGuiGraphics.pose().translate(pos[0], pos[1], -1);
-        pGuiGraphics.fill(-5, -5, stringSize+5, font.lineHeight+4, backgroundColor);
-        pGuiGraphics.drawString(font, String.format(displayString, Pinger.latency), 0, 0, textColor, Config.textShadow);
-        pGuiGraphics.pose().popPose();
+        Events.drawPing(pGuiGraphics);
         for(Renderable renderable : this.renderables){
             renderable.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
         }
@@ -49,7 +38,7 @@ public class EditPositionGui extends Screen {
 
     @Override
     public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
-        final int[] pos = {(int) (mc.getWindow().getGuiScaledWidth()*Config.posX), (int) (mc.getWindow().getGuiScaledHeight()*Config.posY)};
+        final int[] pos = {(int) (mc.getWindow().getGuiScaledWidth()* Config.posX), (int) (mc.getWindow().getGuiScaledHeight()*Config.posY)};
         final double scale = 3*Config.scale/mc.getWindow().getGuiScale();
         final int stringSize = font.width(String.format(Config.displayText, 999));
         if(pMouseX-pDragX>=pos[0]-(int)(5*scale) && pMouseX-pDragX<=pos[0]+(int)((stringSize+5)*scale) && pMouseY-pDragY>=pos[1]-(int)(5*scale) && pMouseY-pDragY<=pos[1]+(int)((font.lineHeight+4)*scale)){

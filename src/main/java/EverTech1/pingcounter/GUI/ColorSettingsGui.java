@@ -1,5 +1,6 @@
-package EverTech1.pingcounter;
+package EverTech1.pingcounter.GUI;
 
+import EverTech1.pingcounter.Config;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;

@@ -1,5 +1,6 @@
-package EverTech1.pingcounter;
+package EverTech1.pingcounter.GUI;
 
+import EverTech1.pingcounter.Config;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
@@ -21,7 +22,7 @@ public class SettingsGui extends Screen {
     private Button toggleButton;
     private EditBox editBox;
     private ForgeSlider scaleSlider;
-    protected SettingsGui(Component pTitle) {
+    public SettingsGui(Component pTitle) {
         super(pTitle);
     }
 
