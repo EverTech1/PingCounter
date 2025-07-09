@@ -23,9 +23,9 @@ public class Pinger {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    connection.send(new ServerboundPingRequestPacket(Util.getMillis()));
+                    if(connection!=null) connection.send(new ServerboundPingRequestPacket(Util.getMillis()));
                 }
-            }, 0, interval);
+            }, 3000, interval);
             isPinging = true;
         }
     }
