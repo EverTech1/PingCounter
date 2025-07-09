@@ -31,6 +31,7 @@ public class Events {
     @SubscribeEvent
     public static void onJoinServer(ClientPlayerNetworkEvent.LoggingIn event){
         Main.pinger.startPinging(2000);
+        Pinger.connection = event.getConnection();
         if(!Main.notified){
             ModList.get().getModContainerById(Main.MODID).ifPresent(modContainer -> {
                 VersionChecker.CheckResult res = VersionChecker.getResult(modContainer.getModInfo());
@@ -49,6 +50,7 @@ public class Events {
 
     @SubscribeEvent
     public static void onLeaveServer(ClientPlayerNetworkEvent.LoggingOut event){
+        Pinger.connection = null;
         Main.pinger.stopPinging();
     }
 
@@ -69,7 +71,7 @@ public class Events {
         final int textColor = 0x10000*Config.textColorRed + 0x100*Config.textColorGreen + Config.textColorBlue;
         final int backgroundColor = 0x10000*Config.backgroundColorRed + 0x100*Config.backgroundColorGreen + Config.backgroundColorBlue + 0x1000000*Config.backgroundColorAlpha;
         final double scale = 3*Config.scale/mc.getWindow().getGuiScale();
-        final double[] pos = {(mc.getWindow().getGuiScaledWidth()*Config.posX/scale), (mc.getWindow().getGuiScaledHeight()*Config.posY/scale)};
+        final double[] pos = {(mc.getWindow().getGuiScaledWidth()*Config.posX), (mc.getWindow().getGuiScaledHeight()*Config.posY)};
         final String displayString = String.format(Config.displayText, Pinger.latency);
         final String measureString = String.format(Config.displayText, 999);
         final int stringSize = font.width(measureString);
