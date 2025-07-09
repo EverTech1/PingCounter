@@ -16,6 +16,7 @@ public class ColorSettingsGui extends Screen {
     private final Screen parentScreen;
     private int boxCornerX;
     private int boxCornerY;
+    private float scaleFactor = 1;
 
     private ForgeSlider sliderTextR;
     private ForgeSlider sliderTextG;
@@ -36,25 +37,26 @@ public class ColorSettingsGui extends Screen {
     protected void init() {
         super.init();
         minecraft = Minecraft.getInstance();
-        boxCornerX = (width/2)-(boxWidth/2);
-        boxCornerY = (height/2)-(boxHeight/2);
+        scaleFactor = Math.min(1.0f, Math.min((float)width/boxWidth, (float)height/boxHeight));
+        boxCornerX = (int) ((width/2.0)-(boxWidth*scaleFactor/2.0));
+        boxCornerY = (int) ((height/2.0)-(boxHeight*scaleFactor/2.0));
         int backLength = font.width("Back");
         //Buttons
-        addRenderableWidget(new Button.Builder(Component.literal("Back"), (pButton -> minecraft.setScreen(parentScreen))).pos(boxCornerX+boxWidth/2-backLength/2-30, boxCornerY+boxHeight-30).size(backLength+60, 20).build());
+        addRenderableWidget(new Button.Builder(Component.literal("Back"), (pButton -> minecraft.setScreen(parentScreen))).pos(boxWidth/2-backLength/2-30, boxHeight-30).size(backLength+60, 20).build());
         addRenderableWidget(new Button.Builder(Component.literal(Config.textShadow ? "Shadow: On " : "Shadow: Off"), pButton -> {
             Config.textShadow = !Config.textShadow;
             pButton.setMessage(Component.literal(Config.textShadow ? "Shadow: On " : "Shadow: Off"));
-        }).pos(boxCornerX+20, boxCornerY+205).size(font.width("Shadow: Off"+20), 20).build());
+        }).pos(20, 205).size(font.width("Shadow: Off"+20), 20).build());
         //Sliders
         //Background
-        sliderBackgroundA = new ForgeSlider(boxCornerX + 20, boxCornerY+20, 256, 20, Component.literal("Opacity: "), Component.literal("%"),0, 100, (double) Config.backgroundColorAlpha /2.55, 1, 0, true);
-        sliderBackgroundR = new ForgeSlider(boxCornerX + 20, boxCornerY+45, 256, 20, Component.literal("Red: "), Component.literal(""),0, 255, Config.backgroundColorRed, 1, 0, true);
-        sliderBackgroundG = new ForgeSlider(boxCornerX + 20, boxCornerY+70, 256, 20, Component.literal("Green: "), Component.literal(""),0, 255, Config.backgroundColorGreen, 1, 0, true);
-        sliderBackgroundB = new ForgeSlider(boxCornerX + 20, boxCornerY+95, 256, 20, Component.literal("Blue: "), Component.literal(""),0, 255, Config.backgroundColorBlue, 1, 0, true);
+        sliderBackgroundA = new ForgeSlider(20, 20, 256, 20, Component.literal("Opacity: "), Component.literal("%"),0, 100, (double) Config.backgroundColorAlpha /2.55, 1, 0, true);
+        sliderBackgroundR = new ForgeSlider(20, 45, 256, 20, Component.literal("Red: "), Component.literal(""),0, 255, Config.backgroundColorRed, 1, 0, true);
+        sliderBackgroundG = new ForgeSlider(20, 70, 256, 20, Component.literal("Green: "), Component.literal(""),0, 255, Config.backgroundColorGreen, 1, 0, true);
+        sliderBackgroundB = new ForgeSlider(20, 95, 256, 20, Component.literal("Blue: "), Component.literal(""),0, 255, Config.backgroundColorBlue, 1, 0, true);
         //Text
-        sliderTextR = new ForgeSlider(boxCornerX + 20, boxCornerY+130, 256, 20, Component.literal("Red: "), Component.literal(""),0, 255, Config.textColorRed, 1, 0, true);
-        sliderTextG = new ForgeSlider(boxCornerX + 20, boxCornerY+155, 256, 20, Component.literal("Green: "), Component.literal(""),0, 255, Config.textColorGreen, 1, 0, true);
-        sliderTextB = new ForgeSlider(boxCornerX + 20, boxCornerY+180, 256, 20, Component.literal("Blue: "), Component.literal(""),0, 255, Config.textColorBlue, 1, 0, true);
+        sliderTextR = new ForgeSlider(20, 130, 256, 20, Component.literal("Red: "), Component.literal(""),0, 255, Config.textColorRed, 1, 0, true);
+        sliderTextG = new ForgeSlider(20, 155, 256, 20, Component.literal("Green: "), Component.literal(""),0, 255, Config.textColorGreen, 1, 0, true);
+        sliderTextB = new ForgeSlider(20, 180, 256, 20, Component.literal("Blue: "), Component.literal(""),0, 255, Config.textColorBlue, 1, 0, true);
 
         addRenderableWidget(sliderBackgroundA);
         addRenderableWidget(sliderBackgroundR);
@@ -66,22 +68,25 @@ public class ColorSettingsGui extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+    public void render(GuiGraphics pGuiGraphics, int mouseX, int mouseY, float pPartialTick) {
         final int textColor = 0x10000*Config.textColorRed + 0x100*Config.textColorGreen + Config.textColorBlue;
         final int backgroundColor = 0x10000*Config.backgroundColorRed + 0x100*Config.backgroundColorGreen + Config.backgroundColorBlue;
-
-        pGuiGraphics.fill(boxCornerX, boxCornerY, boxCornerX+boxWidth, boxCornerY+boxHeight, 0xA0000000);
-        pGuiGraphics.drawString(font, "Background:", boxCornerX+20, boxCornerY+10, 0xFFFFFFFF);
-        pGuiGraphics.drawString(font, "Text:", boxCornerX+20, boxCornerY+120, 0xFFFFFFFF);
+        pGuiGraphics.pose().pushPose();
+        pGuiGraphics.pose().translate(boxCornerX, boxCornerY, 0);
+        pGuiGraphics.pose().scale(scaleFactor, scaleFactor, 1);
+        pGuiGraphics.fill(0, 0, boxWidth, boxHeight, 0xA0000000);
+        pGuiGraphics.drawString(font, "Background:", 20, 10, 0xFFFFFFFF);
+        pGuiGraphics.drawString(font, "Text:", 20, 120, 0xFFFFFFFF);
         //Draw outline
-        pGuiGraphics.fill(boxCornerX+285, boxCornerY+44, boxCornerX+307, boxCornerY+116, 0xFFFFFFFF);
-        pGuiGraphics.fill(boxCornerX+285, boxCornerY+129, boxCornerX+307, boxCornerY+201, 0xFFFFFFFF);
+        pGuiGraphics.fill(285, 44, 307, 116, 0xFFFFFFFF);
+        pGuiGraphics.fill(285, 129, 307, 201, 0xFFFFFFFF);
         //Draw samples
-        pGuiGraphics.fill(boxCornerX+286, boxCornerY+45, boxCornerX+306, boxCornerY+115, backgroundColor|0xFF000000);
-        pGuiGraphics.fill(boxCornerX+286, boxCornerY+130, boxCornerX+306, boxCornerY+200, textColor|0xFF000000);
+        pGuiGraphics.fill(286, 45, 306, 115, backgroundColor|0xFF000000);
+        pGuiGraphics.fill(286, 130, 306, +200, textColor|0xFF000000);
         for(Renderable renderable : this.renderables){
-            renderable.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
+            renderable.render(pGuiGraphics, (int)((mouseX-boxCornerX)/scaleFactor), (int)((mouseY-boxCornerY)/scaleFactor), pPartialTick);
         }
+        pGuiGraphics.pose().popPose();
     }
 
     @Override
@@ -102,5 +107,20 @@ public class ColorSettingsGui extends Screen {
     public void onClose() {
         Config.updateConfig();
         super.onClose();
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        return super.mouseClicked((int)((mouseX-boxCornerX)/scaleFactor), (int)((mouseY-boxCornerY)/scaleFactor), button);
+    }
+
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+        return super.mouseDragged((int)((mouseX-boxCornerX)/scaleFactor), (int)((mouseY-boxCornerY)/scaleFactor), button, deltaX, deltaY);
+    }
+
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        return super.mouseReleased((int)((mouseX-boxCornerX)/scaleFactor), (int)((mouseY-boxCornerY)/scaleFactor), button);
     }
 }
