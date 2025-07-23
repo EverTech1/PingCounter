@@ -4,6 +4,7 @@ import EverTech1.pingcounter.GUI.SettingsGui;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.neoforged.api.distmarker.Dist;
@@ -12,6 +13,8 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.VersionChecker;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.*;
+
+import java.net.URI;
 
 @EventBusSubscriber(modid = Main.MODID, value = Dist.CLIENT)
 public class Events {
@@ -31,7 +34,7 @@ public class Events {
                 VersionChecker.CheckResult res = VersionChecker.getResult(modContainer.getModInfo());
                 if(res.status() == VersionChecker.Status.OUTDATED){
                     if(Minecraft.getInstance().player != null){
-                        Minecraft.getInstance().player.displayClientMessage(Component.literal("Ping Counter mod is outdated. Download latest version ").append(Component.literal("here").withStyle(style -> style.withColor(ChatFormatting.AQUA).withUnderlined(true).withClickEvent(ClickEventCompat.createOpenUrl(res.url())))), false);
+                        Minecraft.getInstance().player.displayClientMessage(Component.literal("Ping Counter mod is outdated. Download latest version ").append(Component.literal("here").withStyle(style -> style.withColor(ChatFormatting.AQUA).withUnderlined(true).withClickEvent(new ClickEvent.OpenUrl(URI.create(res.url()))))), false);
                     }
                     Main.notified = true;
                 }
