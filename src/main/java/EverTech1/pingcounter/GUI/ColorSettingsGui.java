@@ -69,12 +69,12 @@ public class ColorSettingsGui extends Screen {
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        guiGraphics.pose().pushPose();
-        final int textColor = 0x10000*Config.textColorRed + 0x100*Config.textColorGreen + Config.textColorBlue;
+        guiGraphics.pose().pushMatrix();
+        final int textColor = 0xFF000000 + 0x10000*Config.textColorRed + 0x100*Config.textColorGreen + Config.textColorBlue;
         final int backgroundColor = 0x10000*Config.backgroundColorRed + 0x100*Config.backgroundColorGreen + Config.backgroundColorBlue;
 
-        guiGraphics.pose().translate(boxCornerX, boxCornerY, 0);
-        guiGraphics.pose().scale(scaleFactor, scaleFactor, 1);
+        guiGraphics.pose().translate(boxCornerX, boxCornerY);
+        guiGraphics.pose().scale(scaleFactor, scaleFactor);
         guiGraphics.fill(0, 0, boxWidth, boxHeight, 0xA0000000);
         guiGraphics.drawString(font, "Background:", 20, 10, 0xFFFFFFFF);
         guiGraphics.drawString(font, "Text:", 20, 120, 0xFFFFFFFF);
@@ -87,7 +87,7 @@ public class ColorSettingsGui extends Screen {
         for(Renderable renderable : this.renderables){
             renderable.render(guiGraphics, (int)((mouseX-boxCornerX)/scaleFactor), (int)((mouseY-boxCornerY)/scaleFactor), partialTick);
         }
-        guiGraphics.pose().popPose();
+        guiGraphics.pose().popMatrix();
     }
 
     @Override

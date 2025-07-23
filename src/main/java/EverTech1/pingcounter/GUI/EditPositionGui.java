@@ -31,8 +31,7 @@ public class EditPositionGui extends Screen {
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        guiGraphics.fill(0, 0, width, height, -11, 0xA0000000);
-        Font font = mc.font;
+        guiGraphics.fill(0, 0, width, height, 0xA0000000);
         PingLayer.renderInternal(guiGraphics);
         for(Renderable renderable : this.renderables){
             renderable.render(guiGraphics, mouseX, mouseY, partialTick);

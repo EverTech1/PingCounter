@@ -1,5 +1,3 @@
-modLoader="javafml"
-loaderVersion="${loader_version_range}"
 license="${mod_license}"
 issueTrackerURL="https://github.com/EverTech1/PingCounter/issues"
 
@@ -9,23 +7,24 @@ version="${mod_version}"
 displayName="${mod_name}"
 updateJSONURL="PLACEHOLDER_JSON"
 displayURL="PLACEHOLDER_DOWNLOAD"
+authors="${mod_authors}"
+license="${mod_license}"
+
 [[mixins]]
     config = "pingcounter.mixins.json"
-authors="${mod_authors}"
 
-description='''${mod_description}'''
+[[dependencies.${mod_id}]] #optional
+modId="neoforge" #mandatory
+
+type="required" #mandatory
+
+versionRange="[${neo_version},)"
+ordering="NONE"
+side="CLIENT"
+
 [[dependencies.${mod_id}]]
-    modId="neoforge"
-    mandatory=true
-    versionRange="${neo_version_range}"
-    ordering="NONE"
-    side="BOTH"
-
-[[dependencies.${mod_id}]]
-    modId="minecraft"
-    mandatory=true
-
-    versionRange="${minecraft_version_range}"
-    ordering="NONE"
-    side="BOTH"
-
+modId="minecraft"
+type="required"
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="CLIENT"

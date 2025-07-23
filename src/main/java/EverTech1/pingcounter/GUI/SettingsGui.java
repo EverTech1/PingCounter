@@ -53,15 +53,15 @@ public class SettingsGui extends Screen {
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float pPartialTick) {
-        guiGraphics.pose().pushPose();
-        guiGraphics.pose().translate(boxCornerX, boxCornerY, 0);
-        guiGraphics.pose().scale(scaleFactor, scaleFactor, 0);
+        guiGraphics.pose().pushMatrix();
+        guiGraphics.pose().translate(boxCornerX, boxCornerY);
+        guiGraphics.pose().scale(scaleFactor, scaleFactor);
         guiGraphics.fill(0, 0, boxWidth, boxHeight, 0xA0000000);
         for(Renderable renderable : this.renderables){
             renderable.render(guiGraphics, (int)((mouseX-boxCornerX)/scaleFactor), (int)((mouseY-boxCornerY)/scaleFactor), pPartialTick);
         }
         guiGraphics.drawString(font, "Ping Counter settings", 20, 10, 0xFFFFFFFF);
-        guiGraphics.pose().popPose();
+        guiGraphics.pose().popMatrix();
     }
 
     private Button.OnPress onPressButton(int id){
