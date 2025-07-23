@@ -9,6 +9,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.client.gui.widget.ForgeSlider;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Matcher;
 
@@ -53,16 +54,19 @@ public class SettingsGui extends Screen {
 
     @Override
     public void render(GuiGraphics pGuiGraphics, int mouseX, int mouseY, float pPartialTick) {
-        pGuiGraphics.pose().pushPose();
-        pGuiGraphics.pose().translate(boxCornerX, boxCornerY, 0);
-        pGuiGraphics.pose().scale(scaleFactor, scaleFactor, 1);
+        pGuiGraphics.pose().pushMatrix();
+        pGuiGraphics.pose().translate(boxCornerX, boxCornerY);
+        pGuiGraphics.pose().scale(scaleFactor, scaleFactor);
         pGuiGraphics.fill(0, 0, boxWidth, boxHeight, 0xA0000000);
         for(Renderable renderable : this.renderables){
             renderable.render(pGuiGraphics, (int)((mouseX-boxCornerX)/scaleFactor), (int)((mouseY-boxCornerY)/scaleFactor), pPartialTick);
         }
         pGuiGraphics.drawString(font, "Ping Counter settings", 20, 10, 0xFFFFFFFF);
-        pGuiGraphics.pose().popPose();
+        pGuiGraphics.pose().popMatrix();
     }
+
+    @Override
+    protected void renderBlurredBackground(@NotNull GuiGraphics pGuiGraphics){ }
 
     private Button.OnPress onPressButton(int id){
         return pButton -> {

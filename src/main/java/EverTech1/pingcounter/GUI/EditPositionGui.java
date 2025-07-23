@@ -30,7 +30,7 @@ public class EditPositionGui extends Screen {
 
     @Override
     public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
-        pGuiGraphics.fill(0, 0, width, height, -11, 0xA0000000);
+        pGuiGraphics.fill(0, 0, width, height, 0xA0000000);
         Events.drawPing(pGuiGraphics);
         for(Renderable renderable : this.renderables){
             renderable.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);

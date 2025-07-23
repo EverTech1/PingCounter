@@ -12,7 +12,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.VersionChecker;
 import net.minecraftforge.fml.common.Mod;
@@ -22,10 +22,8 @@ public class Events {
 
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase == TickEvent.Phase.END) {
-            while (Main.keyMap.consumeClick()) {
-              Minecraft.getInstance().setScreen(new SettingsGui(CommonComponents.EMPTY));
-            }
+        while (Main.keyMap.consumeClick()) {
+          Minecraft.getInstance().setScreen(new SettingsGui(CommonComponents.EMPTY));
         }
     }
     @SubscribeEvent
@@ -65,21 +63,21 @@ public class Events {
     }
 
     public static void drawPing(GuiGraphics guiGraphics){
-        guiGraphics.pose().pushPose();
+        guiGraphics.pose().pushMatrix();
         Minecraft mc = Minecraft.getInstance();
         Font font = mc.font;
-        final int textColor = 0x10000*Config.textColorRed + 0x100*Config.textColorGreen + Config.textColorBlue;
+        final int textColor = 0xFF000000 + 0x10000*Config.textColorRed + 0x100*Config.textColorGreen + Config.textColorBlue;
         final int backgroundColor = 0x10000*Config.backgroundColorRed + 0x100*Config.backgroundColorGreen + Config.backgroundColorBlue + 0x1000000*Config.backgroundColorAlpha;
         final double scale = 3*Config.scale/mc.getWindow().getGuiScale();
-        final double[] pos = {(mc.getWindow().getGuiScaledWidth()*Config.posX), (mc.getWindow().getGuiScaledHeight()*Config.posY)};
+        final float[] pos = {(float) (mc.getWindow().getGuiScaledWidth()*Config.posX), (float) (mc.getWindow().getGuiScaledHeight()*Config.posY)};
         final String displayString = String.format(Config.displayText, Pinger.latency);
         final String measureString = String.format(Config.displayText, 999);
         final int stringSize = font.width(measureString);
-        guiGraphics.pose().translate(pos[0], pos[1], 0.0);
-        guiGraphics.pose().scale((float)scale, (float)scale, 1);
+        guiGraphics.pose().translate(pos[0], pos[1]);
+        guiGraphics.pose().scale((float)scale, (float)scale);
         guiGraphics.fill(-5, -5, stringSize+5, font.lineHeight+4, backgroundColor);
         guiGraphics.drawString(font, String.format(displayString, Pinger.latency), 0, 0, textColor, Config.textShadow);
-        guiGraphics.pose().popPose();
+        guiGraphics.pose().popMatrix();
     }
 
 }

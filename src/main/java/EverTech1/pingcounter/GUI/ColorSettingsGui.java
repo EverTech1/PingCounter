@@ -8,6 +8,7 @@ import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.client.gui.widget.ForgeSlider;
+import org.jetbrains.annotations.NotNull;
 
 public class ColorSettingsGui extends Screen {
     private Minecraft minecraft;
@@ -71,9 +72,9 @@ public class ColorSettingsGui extends Screen {
     public void render(GuiGraphics pGuiGraphics, int mouseX, int mouseY, float pPartialTick) {
         final int textColor = 0x10000*Config.textColorRed + 0x100*Config.textColorGreen + Config.textColorBlue;
         final int backgroundColor = 0x10000*Config.backgroundColorRed + 0x100*Config.backgroundColorGreen + Config.backgroundColorBlue;
-        pGuiGraphics.pose().pushPose();
-        pGuiGraphics.pose().translate(boxCornerX, boxCornerY, 0);
-        pGuiGraphics.pose().scale(scaleFactor, scaleFactor, 1);
+        pGuiGraphics.pose().pushMatrix();
+        pGuiGraphics.pose().translate(boxCornerX, boxCornerY);
+        pGuiGraphics.pose().scale(scaleFactor, scaleFactor);
         pGuiGraphics.fill(0, 0, boxWidth, boxHeight, 0xA0000000);
         pGuiGraphics.drawString(font, "Background:", 20, 10, 0xFFFFFFFF);
         pGuiGraphics.drawString(font, "Text:", 20, 120, 0xFFFFFFFF);
@@ -86,9 +87,10 @@ public class ColorSettingsGui extends Screen {
         for(Renderable renderable : this.renderables){
             renderable.render(pGuiGraphics, (int)((mouseX-boxCornerX)/scaleFactor), (int)((mouseY-boxCornerY)/scaleFactor), pPartialTick);
         }
-        pGuiGraphics.pose().popPose();
+        pGuiGraphics.pose().popMatrix();
     }
-
+    @Override
+    protected void renderBlurredBackground(@NotNull GuiGraphics pGuiGraphics){ }
     @Override
     public void tick() {
         Config.backgroundColorAlpha = (int)Math.round(2.55*sliderBackgroundA.getValue());
