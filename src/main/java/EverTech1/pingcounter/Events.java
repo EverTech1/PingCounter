@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
@@ -16,6 +17,8 @@ import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.VersionChecker;
 import net.minecraftforge.fml.common.Mod;
+
+import java.net.URI;
 
 @Mod.EventBusSubscriber(modid = Main.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class Events {
@@ -35,7 +38,7 @@ public class Events {
                 VersionChecker.CheckResult res = VersionChecker.getResult(modContainer.getModInfo());
                 if(res.status().isOutdated()){
                     if(Minecraft.getInstance().player != null){
-                        Minecraft.getInstance().player.displayClientMessage(Component.literal("Ping Counter mod is outdated. Download latest version ").append(Component.literal("here").withStyle(style -> style.withColor(ChatFormatting.AQUA).withUnderlined(true).withClickEvent(ClickEventCompat.createOpenUrl(res.url())))), false);
+                        Minecraft.getInstance().player.displayClientMessage(Component.literal("Ping Counter mod is outdated. Download latest version ").append(Component.literal("here").withStyle(style -> style.withColor(ChatFormatting.AQUA).withUnderlined(true).withClickEvent(new ClickEvent.OpenUrl(URI.create(res.url()))))), false);
                     }
                     Main.notified = true;
                 }
