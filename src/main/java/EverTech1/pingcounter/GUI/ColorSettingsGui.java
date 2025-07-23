@@ -8,6 +8,7 @@ import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.client.gui.widget.ExtendedSlider;
+import org.jetbrains.annotations.NotNull;
 
 public class ColorSettingsGui extends Screen {
     private Minecraft minecraft;
@@ -89,6 +90,9 @@ public class ColorSettingsGui extends Screen {
         }
         guiGraphics.pose().popMatrix();
     }
+
+    @Override
+    protected void renderBlurredBackground(@NotNull GuiGraphics guiGraphics){}
 
     @Override
     public void tick() {

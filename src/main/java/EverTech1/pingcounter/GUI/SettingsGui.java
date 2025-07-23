@@ -9,6 +9,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.client.gui.widget.ExtendedSlider;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Matcher;
 
@@ -63,6 +64,9 @@ public class SettingsGui extends Screen {
         guiGraphics.drawString(font, "Ping Counter settings", 20, 10, 0xFFFFFFFF);
         guiGraphics.pose().popMatrix();
     }
+
+    @Override
+    protected void renderBlurredBackground(@NotNull GuiGraphics guiGraphics){}
 
     private Button.OnPress onPressButton(int id){
         return pButton -> {
