@@ -4,7 +4,6 @@ import EverTech1.pingcounter.Config;
 import EverTech1.pingcounter.Main;
 import EverTech1.pingcounter.PingLayer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Renderable;
