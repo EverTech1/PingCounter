@@ -68,16 +68,19 @@ public class SettingsGui extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
-        context.getMatrices().push();
-        context.getMatrices().translate(boxCornerX, boxCornerY, 0);
-        context.getMatrices().scale(scaleFactor, scaleFactor, 0);
+        context.getMatrices().pushMatrix();
+        context.getMatrices().translate(boxCornerX, boxCornerY);
+        context.getMatrices().scale(scaleFactor, scaleFactor);
         context.fill(0, 0, boxWidth, boxHeight, 0xA0000000);
         for(Drawable drawable : this.drawables){
             drawable.render(context, (int)((mouseX-boxCornerX)/scaleFactor), (int)((mouseY-boxCornerY)/scaleFactor), deltaTicks);
         }
         context.drawText(textRenderer, "Ping Counter settings", 20, 10, 0xFFFFFFFF, false);
-        context.getMatrices().pop();
+        context.getMatrices().popMatrix();
     }
+
+    @Override
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float deltaTicks){}
 
     private ButtonWidget.PressAction onPressButton(int id){
         return pressAction -> {
