@@ -9,13 +9,12 @@ import net.minecraft.client.gui.LayeredDraw;
 public class PingLayer implements LayeredDraw.Layer {
     @Override
     public void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
-        guiGraphics.pose().pushPose();
         if(Config.enabled && !Main.isEditing &&!Minecraft.getInstance().isLocalServer()&&!Minecraft.getInstance().gui.getDebugOverlay().showDebugScreen()){
             renderInternal(guiGraphics);
         }
-        guiGraphics.pose().popPose();
     }
     public static void renderInternal(GuiGraphics guiGraphics){
+        guiGraphics.pose().pushPose();
         Minecraft mc = Minecraft.getInstance();
         Font font = mc.font;
         final int textColor = 0x10000*Config.textColorRed + 0x100*Config.textColorGreen + Config.textColorBlue;
@@ -30,5 +29,6 @@ public class PingLayer implements LayeredDraw.Layer {
         guiGraphics.pose().scale((float)scale, (float)scale, 1);
         guiGraphics.fill(-5, -5, stringSize+5, font.lineHeight+4, backgroundColor);
         guiGraphics.drawString(font, String.format(displayString, Pinger.latency), 0, 0, textColor, Config.textShadow);
+        guiGraphics.pose().popPose();
     }
 }
