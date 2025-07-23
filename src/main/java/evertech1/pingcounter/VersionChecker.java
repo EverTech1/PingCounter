@@ -15,9 +15,9 @@ public class VersionChecker {
     public enum Results {NOT_STARTED, STARTED, FAILED, OLD, UP_TO_DATE, AHEAD};
     public static Results result = Results.NOT_STARTED;
     private static class Versions{
-        @SerializedName("1.21.6-latest")
+        @SerializedName("1.21.5-latest")
         String latest;
-        @SerializedName("1.21.6-lastImportant")
+        @SerializedName("1.21.5-lastImportant")
         String lastImportant;
     }
 

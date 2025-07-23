@@ -143,9 +143,9 @@ public class ColorSettingsGui extends Screen {
     public void render(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
         final int textColor = 0x10000 * cfg.textColorRed + 0x100 * cfg.textColorGreen + cfg.textColorBlue;
         final int backgroundColor = 0x10000 * cfg.backgroundColorRed + 0x100 * cfg.backgroundColorGreen + cfg.backgroundColorBlue;
-        context.getMatrices().pushMatrix();
-        context.getMatrices().translate(boxCornerX, boxCornerY);
-        context.getMatrices().scale(scaleFactor, scaleFactor);
+        context.getMatrices().push();
+        context.getMatrices().translate(boxCornerX, boxCornerY, 0);
+        context.getMatrices().scale(scaleFactor, scaleFactor, 1);
         context.fill(0, 0, boxWidth, boxHeight, 0xA0000000);
         context.drawText(textRenderer, "Background:", 20, 10, 0xFFFFFFFF, false);
         context.drawText(textRenderer, "Text:", 20, 120, 0xFFFFFFFF, false);
@@ -158,11 +158,8 @@ public class ColorSettingsGui extends Screen {
         for(Drawable drawable : drawables){
             drawable.render(context, (int)((mouseX-boxCornerX)/scaleFactor), (int)((mouseY-boxCornerY)/scaleFactor), deltaTicks);
         }
-        context.getMatrices().popMatrix();
+        context.getMatrices().pop();
     }
-
-    @Override
-    public void renderBackground(DrawContext context, int mouseX, int mouseY, float deltaTicks){}
 
     @Override
     public void close() {

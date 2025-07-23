@@ -42,7 +42,7 @@ public class EditPositionGui extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
-        context.fill(0, 0, width, height, 0xA0000000);
+        context.fill(0, 0, width, height, -11, 0xA0000000);
         RenderPing.renderOverlay(context);
         backButton.render(context, mouseX, mouseY, deltaTicks);
         resetButton.render(context, mouseX, mouseY, deltaTicks);
