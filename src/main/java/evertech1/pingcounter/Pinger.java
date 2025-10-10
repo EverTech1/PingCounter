@@ -26,7 +26,7 @@ public class Pinger {
         if(!isPinging) {
             isPinging = true;
             if(pinger != null && pinger.state() == Future.State.RUNNING) pinger.cancel(true);
-            pinger = pingerExecutor.scheduleAtFixedRate(pingerTask, 3000, 2000, TimeUnit.MILLISECONDS);
+            pinger = pingerExecutor.scheduleAtFixedRate(pingerTask, 3000, interval, TimeUnit.MILLISECONDS);
         }
 
     }
