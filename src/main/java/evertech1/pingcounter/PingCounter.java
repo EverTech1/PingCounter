@@ -27,7 +27,7 @@ import java.net.URI;
 
 @Environment(EnvType.CLIENT)
 public class PingCounter implements ModInitializer {
-	public static String MOD_VERSION = "1.0.1";
+	public static String MOD_VERSION = "1.0.2";
 	public static final String MOD_ID = "pingcounter";
 	private static final Identifier PING_LAYER = Identifier.of(PingCounter.MOD_ID, "ping_layer");
 	private static KeyBinding keybind;

@@ -6,27 +6,32 @@ import net.minecraft.util.Util;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.*;
 
 public class Pinger {
     public static boolean isPinging = false;
     public static boolean isConnected = false;
     public static long ping = 0;
     public static PacketSender sender;
-    private static final TimerTask timerTask = new TimerTask() {
-        @Override
+    private static final Runnable pingerTask = new Runnable() {
         public void run() {
             if(sender != null && isConnected){
                 sender.sendPacket(new QueryPingC2SPacket(Util.getMeasuringTimeMs()));
             }
         }
     };
-    private static final Timer timer = new Timer("pingTimer");
+    private final static ScheduledExecutorService pingerExecutor = Executors.newSingleThreadScheduledExecutor();
+    private static ScheduledFuture<?> pinger;
     public static void startPinger(int interval){
-        if(!isPinging) timer.schedule(timerTask, 3000, interval);
-        isPinging = true;
+        if(!isPinging) {
+            isPinging = true;
+            if(pinger != null && pinger.state() == Future.State.RUNNING) pinger.cancel(true);
+            pinger = pingerExecutor.scheduleAtFixedRate(pingerTask, 3000, 2000, TimeUnit.MILLISECONDS);
+        }
+
     }
     public static void stopPinger(){
-        if(isPinging) timer.cancel();
+        if(isPinging && pinger.state().equals(Future.State.RUNNING)) pinger.cancel(true);
         isPinging = false;
     }
 }
