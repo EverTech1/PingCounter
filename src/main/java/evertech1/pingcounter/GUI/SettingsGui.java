@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import evertech1.pingcounter.Config;
 import evertech1.pingcounter.ConfigHandler;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.screen.Screen;
@@ -119,17 +120,20 @@ public class SettingsGui extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        return super.mouseClicked((int)((mouseX-boxCornerX)/scaleFactor), (int)((mouseY-boxCornerY)/scaleFactor), button);
+    public boolean mouseClicked(Click click, boolean doubled) {
+        Click scaledClick = new Click(((click.x()-boxCornerX)/scaleFactor), ((click.y()-boxCornerY)/scaleFactor), click.buttonInfo());
+        return super.mouseClicked(scaledClick, doubled);
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        return super.mouseDragged((int)((mouseX-boxCornerX)/scaleFactor), (int)((mouseY-boxCornerY)/scaleFactor), button, deltaX, deltaY);
+    public boolean mouseDragged(Click click, double deltaX, double deltaY) {
+        Click scaledClick = new Click(((click.x()-boxCornerX)/scaleFactor), ((click.y()-boxCornerY)/scaleFactor), click.buttonInfo());
+        return super.mouseDragged(scaledClick , deltaX, deltaY);
     }
 
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        return super.mouseReleased((int)((mouseX-boxCornerX)/scaleFactor), (int)((mouseY-boxCornerY)/scaleFactor), button);
+    public boolean mouseReleased(Click click) {
+        Click scaledClick = new Click(((click.x()-boxCornerX)/scaleFactor), ((click.y()-boxCornerY)/scaleFactor), click.buttonInfo());
+        return super.mouseReleased(scaledClick);
     }
 }

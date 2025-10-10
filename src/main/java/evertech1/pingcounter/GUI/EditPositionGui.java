@@ -5,6 +5,7 @@ import evertech1.pingcounter.ConfigHandler;
 import evertech1.pingcounter.PingCounter;
 import evertech1.pingcounter.RenderPing;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -49,29 +50,29 @@ public class EditPositionGui extends Screen {
     }
 
     @Override
-    public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
+    public boolean mouseDragged(Click click, double pDragX, double pDragY) {
         if(grabbed){
             cfg.posX = Math.min(Math.max(cfg.posX+pDragX/width, 0), 1);
             cfg.posY = Math.min(Math.max(cfg.posY+pDragY/height, 0), 1);
         }
-        return super.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
+        return super.mouseDragged(click, pDragX, pDragY);
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean mouseClicked(Click click, boolean doubled) {
         final int[] pos = {(int) (minecraft.getWindow().getScaledWidth()*cfg.posX), (int) (minecraft.getWindow().getScaledHeight()*cfg.posY)};
         final double scale = 3*cfg.scale/minecraft.getWindow().getScaleFactor();
         final int stringSize = textRenderer.getWidth(String.format(cfg.displayText, 999));
-        if(mouseX>=pos[0]-(int)(5*scale) && mouseX<=pos[0]+(int)((stringSize+5)*scale) && mouseY>=pos[1]-(int)(5*scale) && mouseY<=pos[1]+(int)((textRenderer.fontHeight+4)*scale)){
+        if(click.x()>=pos[0]-(int)(5*scale) && click.x()<=pos[0]+(int)((stringSize+5)*scale) && click.y()>=pos[1]-(int)(5*scale) && click.y()<=pos[1]+(int)((textRenderer.fontHeight+4)*scale)){
             grabbed = true;
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(click, doubled);
     }
 
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+    public boolean mouseReleased(Click click) {
         grabbed = false;
-        return super.mouseReleased(mouseX, mouseY, button);
+        return super.mouseReleased(click);
     }
 
     @Override

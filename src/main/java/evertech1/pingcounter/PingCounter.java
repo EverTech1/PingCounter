@@ -41,10 +41,10 @@ public class PingCounter implements ModInitializer {
 		VersionChecker.startCheck();
 
 		keybind = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-				"key.pingcounter.open_settings",
+				"key.category.pingcounter.open_settings",
 				InputUtil.Type.KEYSYM,
 				GLFW.GLFW_KEY_MINUS,
-				"key.categories.pingcounter"
+				KeyBinding.Category.create(Identifier.of("pingcounter", "keybinds"))
 		));
 		ConfigHandler.getValues();
 		HudElementRegistry.attachElementBefore(VanillaHudElements.CHAT, PING_LAYER, RenderPing::render);
