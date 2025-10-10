@@ -7,6 +7,7 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.client.gui.widget.ExtendedSlider;
 import org.jetbrains.annotations.NotNull;
@@ -106,17 +107,20 @@ public class SettingsGui extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        return super.mouseClicked((int)((mouseX-boxCornerX)/scaleFactor), (int)((mouseY-boxCornerY)/scaleFactor), button);
+    public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
+        MouseButtonEvent scaledClick = new MouseButtonEvent((click.x()-boxCornerX)/scaleFactor, (click.y()-boxCornerY)/scaleFactor, click.buttonInfo());
+        return super.mouseClicked(scaledClick, doubled);
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        return super.mouseDragged((int)((mouseX-boxCornerX)/scaleFactor), (int)((mouseY-boxCornerY)/scaleFactor), button, deltaX, deltaY);
+    public boolean mouseDragged(MouseButtonEvent click, double deltaX, double deltaY) {
+        MouseButtonEvent scaledClick = new MouseButtonEvent((click.x()-boxCornerX)/scaleFactor, (click.y()-boxCornerY)/scaleFactor, click.buttonInfo());
+        return super.mouseDragged(scaledClick, deltaX, deltaY);
     }
 
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        return super.mouseReleased((int)((mouseX-boxCornerX)/scaleFactor), (int)((mouseY-boxCornerY)/scaleFactor), button);
+    public boolean mouseReleased(MouseButtonEvent click) {
+        MouseButtonEvent scaledClick = new MouseButtonEvent((click.x()-boxCornerX)/scaleFactor, (click.y()-boxCornerY)/scaleFactor, click.buttonInfo());
+        return super.mouseReleased(scaledClick);
     }
 }
