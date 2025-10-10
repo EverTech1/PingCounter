@@ -1,4 +1,4 @@
 {
-  "key.pingcounter.open_settings": "Open Settings",
-  "key.categories.pingcounter": "Ping Counter"
+  "key.category.pingcounter.open_settings": "Open Settings",
+  "key.category.pingcounter.keybinds": "Ping Counter"
 }

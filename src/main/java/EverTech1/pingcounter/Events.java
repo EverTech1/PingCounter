@@ -20,13 +20,13 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.net.URI;
 
-@Mod.EventBusSubscriber(modid = Main.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = Main.MODID, value = Dist.CLIENT)
 public class Events {
 
     @SubscribeEvent
-    public static void onClientTick(TickEvent.ClientTickEvent event) {
+    public static void onClientTick(TickEvent.ClientTickEvent.Post event) {
         while (Main.keyMap.consumeClick()) {
-          Minecraft.getInstance().setScreen(new SettingsGui(CommonComponents.EMPTY));
+            Minecraft.getInstance().setScreen(new SettingsGui(CommonComponents.EMPTY));
         }
     }
     @SubscribeEvent
