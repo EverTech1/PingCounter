@@ -17,14 +17,12 @@ public class Main
     public static boolean notified = false; //User notified about latest version
     public static final String MODID = "pingcounter";
     public static KeyMapping keyMap = new KeyMapping("key.category.pingcounter.open_settings", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_MINUS, new KeyMapping.Category(ResourceLocation.fromNamespaceAndPath("pingcounter", "keybinds"))); //Settings keybind keymap
-    public static Pinger pinger; //Server pinger instance
     public static boolean isEditing = false;
     public Main(IEventBus modEventBus, ModContainer modContainer)
     {
         modEventBus.addListener(this::registerKeys); //Register keybind
         modEventBus.addListener(this::onRegisterLayers); //Register ping layer
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
-        pinger = new Pinger();
     }
 
     public void onRegisterLayers(RegisterGuiLayersEvent e){

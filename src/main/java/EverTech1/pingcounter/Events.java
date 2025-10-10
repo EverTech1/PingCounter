@@ -28,7 +28,7 @@ public class Events {
     @SubscribeEvent
     public static void onJoinServer(ClientPlayerNetworkEvent.LoggingIn event){
         Pinger.connection = event.getConnection();
-        Main.pinger.startPinging(2000);
+        Pinger.startPinging(2000);
         if(!Main.notified){
             ModList.get().getModContainerById(Main.MODID).ifPresent(modContainer -> {
                 VersionChecker.CheckResult res = VersionChecker.getResult(modContainer.getModInfo());
@@ -48,7 +48,7 @@ public class Events {
     @SubscribeEvent
     public static void onLeaveServer(ClientPlayerNetworkEvent.LoggingOut event){
         Pinger.connection = null;
-        Main.pinger.stopPinging();
+        Pinger.stopPinging();
     }
 
     @SubscribeEvent

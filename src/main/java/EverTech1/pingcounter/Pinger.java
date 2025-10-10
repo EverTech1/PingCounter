@@ -1,34 +1,36 @@
 package EverTech1.pingcounter;
 
 import net.minecraft.Util;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.ping.ServerboundPingRequestPacket;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.*;
+
+import static java.util.concurrent.Executors.*;
 
 public class Pinger {
-    public static long latency;
     public static boolean isPinging = false;
-    private static Timer timer;
+    public static long latency = 0;
     public static Connection connection;
-    public void startPinging(int interval){
-        if(!Minecraft.getInstance().isLocalServer()&&!isPinging&&connection!=null) {
-            timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    if(isPinging) connection.send(new ServerboundPingRequestPacket(Util.getMillis()));
-                }
-            }, 3000, interval);
+    private static final Runnable pingerTask = new Runnable() {
+        public void run() {
+            if(connection != null){
+                if(isPinging) connection.send(new ServerboundPingRequestPacket(Util.getMillis()));
+            }
+        }
+    };
+    private final static ScheduledExecutorService pingerExecutor = newSingleThreadScheduledExecutor();
+    private static ScheduledFuture<?> pinger;
+    public static void startPinging(int interval){
+        if(!isPinging) {
             isPinging = true;
+            if(pinger != null && pinger.state() == Future.State.RUNNING) pinger.cancel(true);
+            pinger = pingerExecutor.scheduleAtFixedRate(pingerTask, 3000, interval, TimeUnit.MILLISECONDS);
         }
+
     }
-    public void stopPinging(){
-        if(isPinging){
-            isPinging = false;
-            timer.cancel();
-        }
+    public static void stopPinging(){
+        if(isPinging && pinger.state().equals(Future.State.RUNNING)) pinger.cancel(true);
+        isPinging = false;
     }
 }

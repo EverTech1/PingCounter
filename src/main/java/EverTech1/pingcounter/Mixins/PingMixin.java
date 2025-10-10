@@ -22,7 +22,7 @@ public abstract class PingMixin{
 
     @Inject(method="handleConfigurationStart", at=@At("HEAD"))
     public void configurationStart(ClientboundStartConfigurationPacket packet, CallbackInfo ci){
-        Main.pinger.stopPinging();
+        Pinger.stopPinging();
     }
 }
 
